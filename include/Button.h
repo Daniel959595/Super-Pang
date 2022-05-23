@@ -18,7 +18,7 @@ public:
 	const ButtonType m_type;
 
 private:
-	sf::RectangleShape m_rect;
+	sf::RectangleShape m_rect; 
 	sf::Font m_font;
 	sf::Text m_text;
 };
