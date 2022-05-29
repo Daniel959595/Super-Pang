@@ -15,6 +15,12 @@ void Menu::handleMenu(sf::RenderWindow& window, sf::View& view)
 	}
 }
 
+//void Menu::addButton(std::unique_ptr<BaseButton*> button)
+void Menu::addButton(std::unique_ptr<BaseButton> button)
+{
+    m_buttons.push_back(std::move(button));
+}
+
 
 void Menu::setTextureAndSprite()
 {
@@ -31,7 +37,7 @@ void Menu::draw(sf::RenderWindow& window)
 	window.clear();
     window.draw(m_backGround);
 	for (auto& b : m_buttons) {
-		b.draw(window);
+		(b)->draw(window);
 	}
 	window.display();
 }
@@ -66,8 +72,8 @@ void Menu::resizeView(sf::RenderWindow& window, sf::View& view, sf::Event& event
 void Menu::handleClick(sf::Vector2f& clickLocation)
 {
     for (auto& b : m_buttons) {
-        if (b.handleClick(clickLocation))
-            runAction(b.m_type);
+        if ((b)->handleClick(clickLocation))
+            (b)->runAction();
     }
 }
 

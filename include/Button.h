@@ -2,23 +2,40 @@
 
 #include "SFML/Graphics.hpp"
 #include "Utilities.h"
+#include "BaseButton.h"
+#include <functional>
 
-class Button
+template <typename FN>
+class Button : public BaseButton
 {
 public:
-	Button(const sf::Vector2f& pos, std::string& str, ButtonType type);
-	void draw(sf::RenderWindow& window);
-	bool handleClick(const sf::Vector2f& ClickPos) const;
+	//using BaseButton::BaseButton();
 
+	//Button(const sf::Vector2f& pos, std::string& str, FN func);
+	Button(sf::Vector2f pos, std::string str, FN f);
+	virtual ~Button() = default;
+
+	//virtual void runAction() override;
 private:
-	void setRect(const sf::Vector2f& pos);
-	void setFontAndText(const std::string& str);
-
-public:
-	const ButtonType m_type;
-
-private:
-	sf::RectangleShape m_rect; 
-	sf::Font m_font;
-	sf::Text m_text;
+	FN m_func;
+	virtual void runAction() override;
 };
+
+
+//template<typename FN>
+//Button<FN>::Button(const sf::Vector2f& pos, std::string& str, FN func) : BaseButton(pos, str), m_func(func)
+//{
+//
+//}
+
+template<typename FN>
+Button<FN>::Button(sf::Vector2f pos, std::string str, FN f) : BaseButton(pos, str), m_func(f)
+{
+
+}
+
+template<typename FN>
+void Button<FN>::runAction()
+{
+	m_func();
+}
