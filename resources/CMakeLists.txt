@@ -4,5 +4,7 @@
 configure_file ("menuBackGround.jpg" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Backgrounds.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Player.png" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Shot.png" ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("Ball.png" ${CMAKE_BINARY_DIR} COPYONLY)
 #configure_file ("RobertKenedy.ttf" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Retro.ttf" ${CMAKE_BINARY_DIR} COPYONLY)

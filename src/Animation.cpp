@@ -9,6 +9,7 @@ Animation::Animation(const AnimationData& data, Resources::Objects object, Direc
 {
     m_sprite.setTexture(Resources::instance().texture(object));
     m_sprite.setScale(4, 4);
+    //if (object != Resources::Objects::Ball)
     update();
 }
 

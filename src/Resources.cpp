@@ -43,6 +43,17 @@ namespace
 
         return palyer;
     }
+    AnimationData BallData() {
+        auto ball = AnimationData{};
+
+        const auto size = sf::Vector2i(112, 112);
+        const auto initSpace = sf::Vector2i(0, 0);
+
+        ball.m_data[Direction::Right].emplace_back(initSpace, size);
+        ball.m_data[Direction::Left] = ball.m_data[Direction::Right];
+
+        return ball;
+    }
     /*AnimationData BackgroundsData() {
 
     }*/
@@ -67,7 +78,7 @@ Resources::Resources()
     loadTextures();
 
     m_data[Player] = PlayerData();
-    //m_data[Ball] = BallData();
+    m_data[Ball] = BallData();
     //m_data[Backgrounds] = BackgroundsData();
 }
 
@@ -75,6 +86,14 @@ void Resources::loadTextures()
 {
     if (!m_textures[Player].loadFromFile("player.png"))
         throw std::runtime_error("Can't load file (player.png).");
+    if (!m_textures[Ball].loadFromFile("Ball.png"))
+        throw std::runtime_error("Can't load file (Ball.png).");
+    m_textures[Ball].setSmooth(true);
     if (!m_textures[Backgrounds].loadFromFile("Backgrounds.png"))
         throw std::runtime_error("Can't load file (Backgrounds.png).");
+
+    if (!m_textures[Shot].loadFromFile("Shot.png"))
+        throw std::runtime_error("Can't load file (Backgrounds.png).");
+    m_textures[Shot].setSmooth(true);
+
 }

@@ -14,6 +14,7 @@ public:
         Player,
         Ball,
         Backgrounds,
+        Shot,
         Max,
     };
 

@@ -7,9 +7,12 @@
                                               "GameObj.cpp"
                                               "MoveAble.cpp"
                                               "Player.cpp"
+                                              "Ball.cpp"
+                                              "Shot.cpp"
                                               "Animation.cpp"
                                               "AnimationData.cpp"
                                               "Direction.cpp"
                                               "Utilities.cpp"
                                               "Resources.cpp"
+                                              "CollisionHandling.cpp"
                                               )

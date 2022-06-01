@@ -8,6 +8,10 @@ constexpr auto PlayerSpeed = 250.f;
 Player::Player()
     : MoveAble(Resources::Objects::Player, Direction::Stay)
 {
+    float x = (WINDOW_WIDTH / 2) - (m_sprite.getGlobalBounds().width / 2);
+    float y = BACBGROUND_HEIGHT  -  m_sprite.getGlobalBounds().height - FRAME_WIDTH;
+    
+    m_sprite.setPosition(sf::Vector2f(x,y));
 }
 
 void Player::dirFromKey()
@@ -27,14 +31,12 @@ void Player::dirFromKey()
     {
         if (sf::Keyboard::isKeyPressed(pair.first))
         {
-            /*m_dir = pair.second;
-            m_animation.direction(pair.second);*/
             direction(pair.second);
             return;
         }
     }
     m_dir = Direction::Stay;
-    m_faceRight = true;
+    //m_faceRight = true;
     m_animation.direction(m_dir);
 }
 
