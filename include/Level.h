@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "BaseBall.h"
 #include "RegularBall.h"
+#include "CollisionHandling.h"
 
 using BallsData = std::vector<std::shared_ptr<BaseBall>>;
 
@@ -19,7 +20,7 @@ public:
 	//void resetLevel();
 	void runLevel(sf::RenderWindow& window);
 
-	void ballShot(GameObj& ball);
+	void ballShot(BaseBall& ball);
 
 private:
 	void setBackgroundRects();
@@ -31,6 +32,7 @@ private:
 	void handleCollision();
 	void borderCollision();
 	void checkCollision(GameObj& obj);
+	void addBalls();
 	void eraseDisposed();
 	void update();
 
@@ -47,6 +49,8 @@ private:
 	sf::Clock m_clock = sf::Clock();
 
 	int m_levelIndex;
+
+	CollisionHandling m_collisionHandler;
 
 	Player m_player;
 	BallsData m_balls;

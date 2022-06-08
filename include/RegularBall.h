@@ -7,7 +7,7 @@
 class RegularBall : public BaseBall
 {
 public:
-	RegularBall(BallSize size, sf::Vector2f pos, Resources::Objects ballType, Direction dir);
+	RegularBall(BallSize size, sf::Vector2f pos, Direction dir, bool newBall);
 
 	virtual pair split() override;
 private:

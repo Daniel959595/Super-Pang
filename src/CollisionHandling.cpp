@@ -12,74 +12,67 @@
 
 
 
-
-namespace // anonymous namespace — the standard way to make function "static"
+CollisionHandling::CollisionHandling(Level& gameLevel)
+    : m_gameLevel(gameLevel)
 {
+}
 
-    void ignore(GameObj& obg1,
-        GameObj& obj2)
-    {
-        return;
-    }
-    // primary collision-processing functions
-    void ballShot(GameObj& ball,
-        GameObj& shot)
-    {
-        shot.setIsDisposed(true);
-        ball.setIsDisposed(true);
-        //Level::ballShot();
-    }
+void CollisionHandling::ignore(GameObj& obg1, GameObj& obj2)
+{
+    return;
+}
 
- 
-    void shotBall(GameObj& shot,
-        GameObj& ball)
-    {
-        ballShot(ball, shot);
-    }
+void CollisionHandling::ballShot(GameObj& baseBall, GameObj& baseShot)
+{
+    baseShot.setIsDisposed(true);
+    baseBall.setIsDisposed(true);
+
+    /*BaseBall& ball = dynamic_cast<BaseBall&>(baseBall);
+
+    if (ball.getBallSize() != BallSize::Small)
+        m_gameLevel.ballShot(ball);*/
+
+}
+
+void CollisionHandling::shotBall(GameObj& baseshot, GameObj& baseBall)
+{
+    ballShot(baseBall, baseshot);
+}
     
-
-    using HitFunctionPtr = void (*)(GameObj&, GameObj&);
-    // typedef void (*HitFunctionPtr)(GameObject&, GameObject&);
-    using Key = std::pair<std::type_index, std::type_index>;
-    // std::unordered_map is better, but it requires defining good hash function for pair
-    using HitMap = std::map<Key, HitFunctionPtr>;
-
-    HitMap initializeCollisionMap()
-    {
-        HitMap phm;
-        phm[Key(typeid(RegularBall), typeid(RegularShot))] = &ballShot;
-        phm[Key(typeid(RegularShot), typeid(RegularBall))] = &shotBall;
-        phm[Key(typeid(RegularShot), typeid(RegularShot))] = &ignore;
-        phm[Key(typeid(RegularBall), typeid(RegularBall))] = &ignore;
-        phm[Key(typeid(Player),      typeid(RegularBall))] = &ignore;  // currently!
-        phm[Key(typeid(RegularBall), typeid(Player))]      = &ignore;  // currently!
-        phm[Key(typeid(Player),      typeid(RegularShot))] = &ignore;  // currently!
-        phm[Key(typeid(RegularShot), typeid(Player))]      = &ignore;  // currently!
-        /*
-        phm[Key(typeid(SpaceShip), typeid(SpaceShip))] = &shipShip;
-        phm[Key(typeid(Asteroid), typeid(SpaceShip))] = &asteroidShip;
-        phm[Key(typeid(SpaceStation), typeid(SpaceShip))] = &stationShip;
-        phm[Key(typeid(SpaceStation), typeid(Asteroid))] = &stationAsteroid;*/
+CollisionHandling::HitMap CollisionHandling::initializeCollisionMap()
+{
+    HitMap phm;
+    phm[Key(typeid(RegularBall), typeid(RegularShot))] = &CollisionHandling::ballShot;
+    phm[Key(typeid(RegularShot), typeid(RegularBall))] = &CollisionHandling::shotBall;
+    phm[Key(typeid(RegularShot), typeid(RegularShot))] = &CollisionHandling::ignore;
+    phm[Key(typeid(RegularBall), typeid(RegularBall))] = &CollisionHandling::ignore;
+    phm[Key(typeid(Player),      typeid(RegularBall))] = &CollisionHandling::ignore;  // currently!
+    phm[Key(typeid(RegularBall), typeid(Player))]      = &CollisionHandling::ignore;  // currently!
+    phm[Key(typeid(Player),      typeid(RegularShot))] = &CollisionHandling::ignore;  // currently!
+    phm[Key(typeid(RegularShot), typeid(Player))]      = &CollisionHandling::ignore;  // currently!
+    /*
+    phm[Key(typeid(SpaceShip), typeid(SpaceShip))] = &shipShip;
+    phm[Key(typeid(Asteroid), typeid(SpaceShip))] = &asteroidShip;
+    phm[Key(typeid(SpaceStation), typeid(SpaceShip))] = &stationShip;
+    phm[Key(typeid(SpaceStation), typeid(Asteroid))] = &stationAsteroid;*/
         
-        return phm;
-    }
+    return phm;
+}
 
-    HitFunctionPtr lookup(const std::type_index& class1, const std::type_index& class2)
+CollisionHandling::HitFunctionPtr CollisionHandling::lookup(const std::type_index& class1, const std::type_index& class2)
+{
+    static HitMap collisionMap = initializeCollisionMap();
+    auto mapEntry = collisionMap.find(std::make_pair(class1, class2));
+    if (mapEntry == collisionMap.end())
     {
-        static HitMap collisionMap = initializeCollisionMap();
-        auto mapEntry = collisionMap.find(std::make_pair(class1, class2));
-        if (mapEntry == collisionMap.end())
-        {
-            return nullptr;
-        }
-        return mapEntry->second;
+        return nullptr;
     }
+    return mapEntry->second;
+}
 
-} // end namespace
-
-void processCollision(GameObj& object1, GameObj& object2)
+void CollisionHandling::processCollision(GameObj& object1, GameObj& object2)
 {
     auto phf = lookup(typeid(object1), typeid(object2));
 
-    phf(object1, object2);
+    (this->*phf)(object1, object2);
 }

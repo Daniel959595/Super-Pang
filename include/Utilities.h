@@ -23,6 +23,7 @@
 
 #define BIG_BALL_SIZE 170
 #define MEDIUM_BALL_SIZE 140
+#define SMALL_BALL_SIZE 110
 
 
 

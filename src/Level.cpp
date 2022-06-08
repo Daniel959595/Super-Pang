@@ -2,7 +2,7 @@
 #include "CollisionHandling.h"
 
 Level::Level() 
-	: m_texture(Resources::instance().texture(Resources::Objects::Backgrounds))
+	: m_texture(Resources::instance().texture(Resources::Objects::Backgrounds)), m_collisionHandler(*this)
 {
 	m_sprite.setTexture(m_texture);
 	setBackgroundRects();
@@ -36,7 +36,7 @@ void Level::loadBalls()
 	float x = (BACBGROUND_WIDTH / 2) - (BIG_BALL_SIZE / 2);
 	float y = BACBGROUND_HEIGHT / 3 - (BIG_BALL_SIZE / 2);
 	
-	m_balls.emplace_back(std::shared_ptr<RegularBall>(new RegularBall(BallSize::Big, sf::Vector2f(x, y), Resources::Objects::RegularBall, Direction::Left)));
+	m_balls.emplace_back(std::shared_ptr<RegularBall>(new RegularBall(BallSize::Big, sf::Vector2f(x, y), Direction::Left, false)));
 }
 
 void Level::setBorders()
@@ -53,6 +53,7 @@ void Level::runLevel(sf::RenderWindow& window)
 		handleEvents(window);
 		update();
 		handleCollision();
+		addBalls();
 		eraseDisposed();
 	}
 }
@@ -114,12 +115,26 @@ void Level::borderCollision()
 void Level::checkCollision(GameObj& obj)
 {
 	for (auto& b : m_balls) {
-		if (obj.checkCollision(*b))
-			processCollision(obj, *b);
+		if (obj.checkCollision(*b)) {
+			m_collisionHandler.processCollision(obj, *b);
+			break;
+		}
 	}
 	for (auto& s : m_player.getShots()) {
-		if (obj.checkCollision(*s))
-			processCollision(obj, *s);
+		if (obj.checkCollision(*s)) {
+			m_collisionHandler.processCollision(obj, *s);
+			break;
+		}
+	}
+}
+
+void Level::addBalls()
+{
+	for (auto& ball : m_balls) {
+		if (ball->isDisposed() && ball->getBallSize() != BallSize::Small) {
+			ballShot(*ball);
+			break;
+		}
 	}
 }
 
@@ -145,7 +160,11 @@ void Level::update()
 	m_player.update(delta);
 }
 
-void Level::ballShot(GameObj& ball)
+void Level::ballShot(BaseBall& ball)
 {
+	//BaseBall& Ball  = dynamic_cast<BaseBall&>(ball);
+	auto pair = ball.split();
 
+	m_balls.push_back(pair.first);
+	m_balls.push_back(pair.second);
 }
