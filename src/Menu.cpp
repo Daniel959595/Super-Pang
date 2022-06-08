@@ -15,7 +15,6 @@ void Menu::handleMenu(sf::RenderWindow& window, sf::View& view)
 	}
 }
 
-//void Menu::addButton(std::unique_ptr<BaseButton*> button)
 void Menu::addButton(std::unique_ptr<BaseButton> button)
 {
     m_buttons.push_back(std::move(button));

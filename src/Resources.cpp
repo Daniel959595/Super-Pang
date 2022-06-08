@@ -17,14 +17,14 @@ namespace
     {
         const auto size = sf::Vector2i(32, 32);
         const auto initSpace = sf::Vector2i(10, 2);
-        const auto textureWidth = sf::Vector2i(34, 0);
+        const auto step = sf::Vector2i(34, 0);
 
         auto palyer = AnimationData{};
         auto currentStart = initSpace;
 
         auto nextStart = [&]()
         {
-            currentStart += textureWidth;
+            currentStart += step;
             return currentStart;
         };
 
@@ -43,7 +43,7 @@ namespace
 
         return palyer;
     }
-    AnimationData BallData() {
+    AnimationData RegularBallData() {
         auto ball = AnimationData{};
 
         const auto size = sf::Vector2i(112, 112);
@@ -54,9 +54,30 @@ namespace
 
         return ball;
     }
-    /*AnimationData BackgroundsData() {
+    AnimationData RegularShotData() {
+        auto shot = AnimationData{};
 
-    }*/
+        auto heightGap = 2;
+        auto size = sf::Vector2i(10, 32); 
+
+        const auto initSpace = sf::Vector2i(398, 1566); 
+
+        auto currentStart = initSpace;
+
+        auto nextStart = [&]()
+        {
+            size.y += heightGap;
+            return currentStart;
+        };
+
+        shot.m_data[Direction::Up].emplace_back(currentStart, size);
+
+        for (int i = 1; i < 80; i++)
+            shot.m_data[Direction::Up].emplace_back(nextStart(), size);
+
+        return shot;  
+                        
+    }
 
 }
 
@@ -78,7 +99,8 @@ Resources::Resources()
     loadTextures();
 
     m_data[Player] = PlayerData();
-    m_data[Ball] = BallData();
+    m_data[RegularBall]   = RegularBallData();
+    m_data[RegularShot]   = RegularShotData();
     //m_data[Backgrounds] = BackgroundsData();
 }
 
@@ -86,14 +108,14 @@ void Resources::loadTextures()
 {
     if (!m_textures[Player].loadFromFile("player.png"))
         throw std::runtime_error("Can't load file (player.png).");
-    if (!m_textures[Ball].loadFromFile("Ball.png"))
+    if (!m_textures[RegularBall].loadFromFile("Ball.png"))
         throw std::runtime_error("Can't load file (Ball.png).");
-    m_textures[Ball].setSmooth(true);
+    m_textures[RegularBall].setSmooth(true);
     if (!m_textures[Backgrounds].loadFromFile("Backgrounds.png"))
         throw std::runtime_error("Can't load file (Backgrounds.png).");
 
-    if (!m_textures[Shot].loadFromFile("Shot.png"))
+    if (!m_textures[RegularShot].loadFromFile("Shot2.png"))
         throw std::runtime_error("Can't load file (Backgrounds.png).");
-    m_textures[Shot].setSmooth(true);
+    m_textures[RegularShot].setSmooth(true);
 
 }

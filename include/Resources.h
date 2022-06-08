@@ -12,9 +12,9 @@ public:
     enum Objects
     {
         Player,
-        Ball,
+        RegularBall,
         Backgrounds,
-        Shot,
+        RegularShot,
         Max,
     };
 

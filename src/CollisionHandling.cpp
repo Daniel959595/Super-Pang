@@ -5,40 +5,37 @@
 #include <typeinfo>
 #include <typeindex>
 
-#include "GameObj.h"
-#include "MoveAble.h"
+
 #include "Player.h"
+#include "Level.h"
+#include "RegularBall.h"
+
 
 
 
 namespace // anonymous namespace — the standard way to make function "static"
 {
 
-    // primary collision-processing functions
-    void shipAsteroid(GameObj& spaceShip,
-        GameObj& asteroid)
+    void ignore(GameObj& obg1,
+        GameObj& obj2)
     {
-        // To get the actual types and use them:
-        // SpaceShip& ship = dynamic_cast<SpaceShip&>(spaceShip);
-        // Asteroid&  ast  = dynamic_cast<Asteroid&>(asteroid);
-        // or:
-        // SpaceShip& ship = static_cast<SpaceShip&>(spaceShip);
-        // Asteroid&  ast  = static_cast<Asteroid&>(asteroid);
-
+        return;
+    }
+    // primary collision-processing functions
+    void ballShot(GameObj& ball,
+        GameObj& shot)
+    {
+        shot.setIsDisposed(true);
+        ball.setIsDisposed(true);
+        //Level::ballShot();
     }
 
-    
-
-    //...
-
-    // secondary collision-processing functions that just
-    // implement symmetry: swap the parameters and call a
-    // primary function
-   /* void asteroidShip(GameObject& asteroid,
-        GameObject& spaceShip)
+ 
+    void shotBall(GameObj& shot,
+        GameObj& ball)
     {
-        shipAsteroid(spaceShip, asteroid);
-    }*/
+        ballShot(ball, shot);
+    }
     
 
     using HitFunctionPtr = void (*)(GameObj&, GameObj&);
@@ -50,14 +47,20 @@ namespace // anonymous namespace — the standard way to make function "static"
     HitMap initializeCollisionMap()
     {
         HitMap phm;
-       // phm[Key(typeid(SpaceShip), typeid(Asteroid))] = &shipAsteroid;
-       /* phm[Key(typeid(SpaceShip), typeid(SpaceStation))] = &shipStation;
-        phm[Key(typeid(Asteroid), typeid(SpaceStation))] = &asteroidStation;
+        phm[Key(typeid(RegularBall), typeid(RegularShot))] = &ballShot;
+        phm[Key(typeid(RegularShot), typeid(RegularBall))] = &shotBall;
+        phm[Key(typeid(RegularShot), typeid(RegularShot))] = &ignore;
+        phm[Key(typeid(RegularBall), typeid(RegularBall))] = &ignore;
+        phm[Key(typeid(Player),      typeid(RegularBall))] = &ignore;  // currently!
+        phm[Key(typeid(RegularBall), typeid(Player))]      = &ignore;  // currently!
+        phm[Key(typeid(Player),      typeid(RegularShot))] = &ignore;  // currently!
+        phm[Key(typeid(RegularShot), typeid(Player))]      = &ignore;  // currently!
+        /*
         phm[Key(typeid(SpaceShip), typeid(SpaceShip))] = &shipShip;
         phm[Key(typeid(Asteroid), typeid(SpaceShip))] = &asteroidShip;
         phm[Key(typeid(SpaceStation), typeid(SpaceShip))] = &stationShip;
         phm[Key(typeid(SpaceStation), typeid(Asteroid))] = &stationAsteroid;*/
-        //...
+        
         return phm;
     }
 
@@ -77,9 +80,6 @@ namespace // anonymous namespace — the standard way to make function "static"
 void processCollision(GameObj& object1, GameObj& object2)
 {
     auto phf = lookup(typeid(object1), typeid(object2));
-   /* if (!phf)
-    {
-        throw UnknownCollision(object1, object2);
-    }*/
+
     phf(object1, object2);
 }

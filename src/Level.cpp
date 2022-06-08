@@ -1,4 +1,5 @@
 #include "Level.h"
+#include "CollisionHandling.h"
 
 Level::Level() 
 	: m_texture(Resources::instance().texture(Resources::Objects::Backgrounds))
@@ -34,8 +35,8 @@ void Level::loadBalls()
 {
 	float x = (BACBGROUND_WIDTH / 2) - (BIG_BALL_SIZE / 2);
 	float y = BACBGROUND_HEIGHT / 3 - (BIG_BALL_SIZE / 2);
-	Ball ball(BallSize::Big, sf::Vector2f(x, y), Direction::Left);
-	m_balls.push_back(ball);
+	
+	m_balls.emplace_back(std::shared_ptr<RegularBall>(new RegularBall(BallSize::Big, sf::Vector2f(x, y), Resources::Objects::RegularBall, Direction::Left)));
 }
 
 void Level::setBorders()
@@ -52,6 +53,7 @@ void Level::runLevel(sf::RenderWindow& window)
 		handleEvents(window);
 		update();
 		handleCollision();
+		eraseDisposed();
 	}
 }
 
@@ -63,7 +65,7 @@ void Level::draw(sf::RenderWindow& window)
 	m_player.draw(window);
 	//window.draw(m_backGround);
 	for (auto& b : m_balls) {
-		b.draw(window);
+		(*b).draw(window);
 	}
 	//tiles
 	//...
@@ -79,9 +81,9 @@ void Level::handleEvents(sf::RenderWindow& window)
 		case sf::Event::Closed:
 			window.close();
 			break;
-		/*case sf::Event::KeyPressed:
-			m_player.direction(event.key.code);
-			break;*/
+		case sf::Event::KeyPressed:
+			m_player.handleEvents(event.key.code);
+			break;
 		}
 	}
 }
@@ -89,14 +91,48 @@ void Level::handleEvents(sf::RenderWindow& window)
 void Level::handleCollision()
 {
 	borderCollision();
+
+	checkCollision(m_player);
+
+	for (auto& b : m_balls) {
+		checkCollision(*b);
+	}
+
+	for (auto& s : m_player.getShots()) {
+		checkCollision(*s);
+	}
 }
 
 void Level::borderCollision()
 {
 	for (auto& b : m_balls) {
-		b.borderCollision(m_borders);
+		(*b).borderCollision(m_borders);
 	}
 	m_player.borderCollision(m_borders);
+}
+
+void Level::checkCollision(GameObj& obj)
+{
+	for (auto& b : m_balls) {
+		if (obj.checkCollision(*b))
+			processCollision(obj, *b);
+	}
+	for (auto& s : m_player.getShots()) {
+		if (obj.checkCollision(*s))
+			processCollision(obj, *s);
+	}
+}
+
+void Level::eraseDisposed()
+{
+	std::erase_if(m_balls, [](auto& ball)
+		{
+			return ball->isDisposed();
+		});
+	std::erase_if(m_player.getShots(), [](auto& shot)
+		{
+			return shot->isDisposed();
+		});
 }
 
 void Level::update()
@@ -104,7 +140,12 @@ void Level::update()
 	const auto delta = m_clock.restart();
 
 	for (auto& b : m_balls) {
-		b.update(delta);
+		(*b).update(delta);
 	}
 	m_player.update(delta);
+}
+
+void Level::ballShot(GameObj& ball)
+{
+
 }

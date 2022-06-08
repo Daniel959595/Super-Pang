@@ -4,20 +4,32 @@
 
 #include "Utilities.h"
 #include "MoveAble.h"
+#include "RegularShot.h"
 
+using ShotsData = std::vector<std::shared_ptr<BaseShot>>;
 
 class Player : public MoveAble
 {
 public:
 	Player();
 
+	virtual void draw(sf::RenderWindow& window) override;
 	virtual void update(sf::Time delta);
 
 	void dirFromKey();
 	void direction(Direction dir);
+	void handleEvents(sf::Keyboard::Key key);
 
-	//void shoot(); 
+	virtual void borderCollision(sf::RectangleShape& border) override;
+
+	ShotsData& getShots() { return m_shots; }
+
 private:
-	bool m_faceRight = true;
-	//std::vector<shoots> m_shoot(); guns?
+	void shoot(); 
+	void updateShots(sf::Time delta);
+
+private:
+	ShotType m_shot = ShotType::Normal;
+	
+	ShotsData m_shots;
 };

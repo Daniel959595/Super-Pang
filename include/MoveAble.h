@@ -5,7 +5,7 @@
 class MoveAble : public GameObj
 {
 public:
-	MoveAble(Resources::Objects object, Direction dir);
+	MoveAble(Resources::Objects object, Direction dir, sf::Time animationTime);
 	~MoveAble() = 0 {};
 
 	virtual void update(sf::Time delta) = 0;

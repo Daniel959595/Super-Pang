@@ -44,20 +44,20 @@ void Controller::exitGame()
 void Controller::addButtons()
 {
 	int i = 0;
-	sf::Vector2f pos = sf::Vector2f(WINDOW_WIDTH/2 - (BUTTON_WIDTH/2), WINDOW_HEIGHT/2 + (i++ * BUTTON_HEIGHT));
+	float x = WINDOW_WIDTH / 2 - (BUTTON_WIDTH / 2);
+	float y = WINDOW_HEIGHT / 2;
 
-	/*auto func = [&]() { this->runGame(); };
-	m_menu.addButton(std::unique_ptr<BaseButton>(new Button(pos, "START", func)));*/
+	sf::Vector2f pos = sf::Vector2f(x, y + (i++ * BUTTON_HEIGHT));
 
 	m_menu.addButton(std::unique_ptr<BaseButton>(new Button(pos, "START", [&]() { this->runGame(); }))); 
 
-	pos = sf::Vector2f(WINDOW_WIDTH / 2 - (BUTTON_WIDTH / 2), WINDOW_HEIGHT / 2 + (i++ * BUTTON_HEIGHT));
+	pos = sf::Vector2f(x, y + (i++ * BUTTON_HEIGHT));
 	m_menu.addButton(std::unique_ptr<BaseButton>(new Button(pos, "SCORE BOARD", [&]() { this->scoreBoard(); })));
 
-	pos = sf::Vector2f(WINDOW_WIDTH / 2 - (BUTTON_WIDTH / 2), WINDOW_HEIGHT / 2 + (i++ * BUTTON_HEIGHT));
+	pos = sf::Vector2f(x, y + (i++ * BUTTON_HEIGHT));
 	m_menu.addButton(std::unique_ptr<BaseButton>(new Button(pos, "HELP", [&]() { this->help(); })));
 
-	pos = sf::Vector2f(WINDOW_WIDTH / 2 - (BUTTON_WIDTH / 2), WINDOW_HEIGHT / 2 + (i++ * BUTTON_HEIGHT));
+	pos = sf::Vector2f(x, y + (i++ * BUTTON_HEIGHT));
 	m_menu.addButton(std::unique_ptr<BaseButton>(new Button(pos, "EXIT", [&]() { this->exitGame(); })));
 
 }

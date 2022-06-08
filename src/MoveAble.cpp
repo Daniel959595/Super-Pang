@@ -1,15 +1,14 @@
 #include "MoveAble.h"
 
-MoveAble::MoveAble(Resources::Objects object, Direction dir)
+MoveAble::MoveAble(Resources::Objects object, Direction dir, sf::Time animationTime)
 	//: GameObj(object, dir), m_dir(dir)
-	: m_animation(Resources::instance().animationData(object), object, dir, m_sprite)
+	: m_animation(Resources::instance().animationData(object), object, dir, m_sprite, animationTime), m_dir(dir)
 {
 }
 
 void MoveAble::borderCollision(sf::RectangleShape& border)
 {
-	if (m_sprite.getGlobalBounds().intersects(border.getGlobalBounds()))
-		moveInside(border);
+	moveInside(border);
 }
 
 void MoveAble::moveInside(sf::RectangleShape& border)

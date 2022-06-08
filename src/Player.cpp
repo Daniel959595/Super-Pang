@@ -3,10 +3,11 @@
 #include <optional>
 
 constexpr auto PlayerSpeed = 250.f;
+const auto AnimationTime = sf::seconds(0.1f);
 
 
 Player::Player()
-    : MoveAble(Resources::Objects::Player, Direction::Stay)
+    : MoveAble(Resources::Objects::Player, Direction::Stay, AnimationTime)
 {
     float x = (WINDOW_WIDTH / 2) - (m_sprite.getGlobalBounds().width / 2);
     float y = BACBGROUND_HEIGHT  -  m_sprite.getGlobalBounds().height - FRAME_WIDTH;
@@ -44,14 +45,51 @@ void Player::direction(Direction dir)
 {
     m_dir = dir;
     m_animation.direction(dir);
-    if (dir == Direction::Left)
+ /*   if (dir == Direction::Left)
         m_faceRight = false;
     else
-        m_faceRight = true;
+        m_faceRight = true;*/
+}
+
+void Player::handleEvents(sf::Keyboard::Key key)
+{
+    switch (key)
+    {
+    case sf::Keyboard::C: shoot(); break;
+
+    default:
+        break;
+    }
+}
+
+void Player::borderCollision(sf::RectangleShape& border)
+{
+
+    for (auto& s : m_shots) {
+        auto topCordinate = (*s).getGlobalBounds().top;
+        if (topCordinate <= border.getGlobalBounds().top)
+            (*s).setIsDisposed(true);
+    }
+    moveInside(border);
+}
+
+void Player::shoot()
+{    
+    //m_shots.emplace_back(std::unique_ptr<BaseShot>(new BaseShot(m_sprite.getPosition())));
+    m_shots.emplace_back(std::shared_ptr<RegularShot>(new RegularShot(m_sprite.getPosition(), Resources::Objects::RegularShot)));
+}
+
+void Player::draw(sf::RenderWindow& window)
+{
+    for (auto& s : m_shots) {
+        (*s).draw(window);
+    }
+    window.draw(m_sprite);
 }
 
 void Player::update(sf::Time delta)
 {
+    updateShots(delta);
     dirFromKey();
     if (m_dir == Direction::Stay)
     {
@@ -62,4 +100,9 @@ void Player::update(sf::Time delta)
     m_animation.update(delta);
 }
 
-
+void Player::updateShots(sf::Time delta)
+{
+    for (auto& s : m_shots) {
+        (*s).update(delta);
+    }
+}
