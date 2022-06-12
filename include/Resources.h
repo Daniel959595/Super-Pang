@@ -15,6 +15,8 @@ public:
         RegularBall,
         Backgrounds,
         RegularShot,
+        BreakableTile,
+        UnbreakableTile,
         Max,
     };
 

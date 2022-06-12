@@ -9,7 +9,7 @@ class BaseShot : public MoveAble
 {
 public:
 	BaseShot(const sf::Vector2f& playerPos, Resources::Objects shotType); // & ?
-	~BaseShot() = 0 {};
+	virtual ~BaseShot() = 0 {};
 
 	virtual void update(sf::Time deltaTime) override;
 

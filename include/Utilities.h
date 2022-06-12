@@ -26,6 +26,25 @@
 #define SMALL_BALL_SIZE 110
 
 
+#define BIG_BALL_SIZE 170
+#define MEDIUM_BALL_SIZE 140
+#define SMALL_BALL_SIZE 110
+
+
+#define BIG_TILE_SIZE 170
+#define MEDIUM_TILE_SIZE 140
+#define SMALL_TILE_SIZE 110
+
+enum class MixDirection {
+	UpAndLeft = 0,
+	UpAndRight,
+	DownAndLeft,
+	DownAndRight,
+	Up,
+	Down, 
+	Right,
+	Left,
+};
 
 enum class ButtonType {
 	START = 0,
@@ -40,9 +59,22 @@ enum class BallSize {
 	Small,
 };
 
+enum class TileSize {
+	Big,
+	Medium,
+	Small,
+};
+
 enum class ShotType {
 	Normal,
 	Double,
 	Special,
 	Bullets,
 };
+
+enum class TileColor {
+	Red,
+	Blue,
+	Orange,
+};
+

@@ -1,14 +1,14 @@
 #include "GameObj.h"
 
-//GameObj::GameObj(Resources::Objects object, Direction dir)
-//	: m_animation(Resources::instance().animationData(object), object, dir, m_sprite)
-//{
-//}
-
-GameObj::GameObj()
+GameObj::GameObj(Resources::Objects object, Direction dir, sf::Time animationTime)
+	: m_animation(Resources::instance().animationData(object), object, dir, m_sprite, animationTime)
 {
-
 }
+
+//GameObj::GameObj()
+//{
+//
+//}
 
 void GameObj::draw(sf::RenderWindow& window)
 {

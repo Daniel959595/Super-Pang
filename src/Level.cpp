@@ -36,7 +36,11 @@ void Level::loadBalls()
 	float x = (BACBGROUND_WIDTH / 2) - (BIG_BALL_SIZE / 2);
 	float y = BACBGROUND_HEIGHT / 3 - (BIG_BALL_SIZE / 2);
 	
-	m_balls.emplace_back(std::shared_ptr<RegularBall>(new RegularBall(BallSize::Big, sf::Vector2f(x, y), Direction::Left, false)));
+	auto pos = sf::Vector2f(x, y);
+	m_balls.emplace_back(std::shared_ptr<RegularBall>(new RegularBall(BallSize::Big, pos, Direction::Left, false)));
+
+	pos = sf::Vector2f(BACBGROUND_WIDTH / 4, (BACBGROUND_HEIGHT / 3)*2);
+	m_tiles.emplace_back(std::shared_ptr<BreakableTile>(new BreakableTile(TileColor::Blue, TileSize::Big, pos, Direction::Stay)));
 }
 
 void Level::setBorders()
@@ -68,8 +72,9 @@ void Level::draw(sf::RenderWindow& window)
 	for (auto& b : m_balls) {
 		(*b).draw(window);
 	}
-	//tiles
-	//...
+	for (auto& t : m_tiles) {
+		(*t).draw(window);
+	}
 	window.display();
 }
 
@@ -120,6 +125,12 @@ void Level::checkCollision(GameObj& obj)
 			break;
 		}
 	}
+	for (auto& t : m_tiles) {
+		if (obj.checkCollision(*t)) {
+			m_collisionHandler.processCollision(obj, *t);
+			break;
+		}
+	}
 	for (auto& s : m_player.getShots()) {
 		if (obj.checkCollision(*s)) {
 			m_collisionHandler.processCollision(obj, *s);
@@ -143,6 +154,10 @@ void Level::eraseDisposed()
 	std::erase_if(m_balls, [](auto& ball)
 		{
 			return ball->isDisposed();
+		});
+	std::erase_if(m_tiles, [](auto& tile)
+		{
+			return tile->isDisposed();
 		});
 	std::erase_if(m_player.getShots(), [](auto& shot)
 		{

@@ -10,7 +10,8 @@
 class GameObj
 {
 public:
-	GameObj();
+	//GameObj();
+	GameObj(Resources::Objects object, Direction dir, sf::Time animationTime);
 	virtual ~GameObj() = 0 {};
 
 	virtual void draw(sf::RenderWindow& window);
@@ -30,6 +31,6 @@ public:
 protected:
 	sf::Sprite m_sprite;
 
+	Animation m_animation;
 	bool m_isDisposed = false;
-	//Animation m_animation;
 };

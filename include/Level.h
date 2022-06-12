@@ -4,11 +4,13 @@
 
 #include "Utilities.h"
 #include "Player.h"
-#include "BaseBall.h"
+//#include "BaseBall.h"
 #include "RegularBall.h"
+#include "BreakableTile.h"
 #include "CollisionHandling.h"
 
 using BallsData = std::vector<std::shared_ptr<BaseBall>>;
+using TilesData = std::vector<std::shared_ptr<BaseTile>>;
 
 class Level
 {
@@ -54,6 +56,7 @@ private:
 
 	Player m_player;
 	BallsData m_balls;
+	TilesData m_tiles;
 	//std::vector<Ball> m_balls;
 	//std::vector<Tile> m_tiles;
 	//std::vector<Gift> m_gifts;

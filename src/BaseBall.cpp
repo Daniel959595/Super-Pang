@@ -40,16 +40,17 @@ float BaseBall::getDesireSize(BallSize size) const
 
 sf::Color BaseBall::getRandColor() const
 {
-	std::vector<sf::Color> m_colors = { sf::Color(200,0,0),
-										sf::Color(0,200,0),
-										sf::Color(0,0,200) };
+	static std::vector<sf::Color> m_colors = { sf::Color(200,0,0),
+										       sf::Color(0,200,0),
+										       sf::Color(0,51,102),
+										       sf::Color(102,0,51)};
 	
 	return m_colors[rand() % m_colors.size()];
 }
 
 void BaseBall::setVelocity(Direction dir, bool isNewBall)
 {
-	float y = (isNewBall ? -20 : 0);
+	float y = (isNewBall ? -20.f : 0.f);
 	switch (dir)
 	{
 	case Direction::Right: m_velocity = sf::Vector2f(3.5f, y);  break;
@@ -106,7 +107,7 @@ void BaseBall::moveInside(sf::RectangleShape& border)
 	MoveAble::moveInside(border);
 }
 
-BallSize BaseBall::getBallSize()
+BallSize BaseBall::getBallSize() const
 {
 	return m_ballSize;
 }

@@ -9,6 +9,8 @@
 #include "Player.h"
 #include "Level.h"
 #include "RegularBall.h"
+#include "RegularShot.h"
+#include "BreakableTile.h"
 
 
 
@@ -38,18 +40,52 @@ void CollisionHandling::shotBall(GameObj& baseshot, GameObj& baseBall)
 {
     ballShot(baseBall, baseshot);
 }
-    
+   
+void CollisionHandling::ballBreakableTile(GameObj& baseBall, GameObj& Tile)
+{
+    BaseBall& ball      = dynamic_cast<BaseBall&>(baseBall);
+    BreakableTile& tile = dynamic_cast<BreakableTile&>(Tile);
+
+    ball.analizeCollision(Tile);
+    //tile.setIsDisposed(true);
+}
+
+void CollisionHandling::BreakableTileBall(GameObj& Tile, GameObj& baseBall)
+{
+    ballBreakableTile(baseBall, Tile);
+}
+
+void CollisionHandling::shotBreakableTile(GameObj& shot, GameObj& tile)
+{
+    shot.setIsDisposed(true);
+    tile.setIsDisposed(true);
+}
+
+void CollisionHandling::breakableTileShot(GameObj& tile, GameObj& shot)
+{
+    shotBreakableTile(shot, tile);
+}
+
 CollisionHandling::HitMap CollisionHandling::initializeCollisionMap()
 {
     HitMap phm;
-    phm[Key(typeid(RegularBall), typeid(RegularShot))] = &CollisionHandling::ballShot;
-    phm[Key(typeid(RegularShot), typeid(RegularBall))] = &CollisionHandling::shotBall;
-    phm[Key(typeid(RegularShot), typeid(RegularShot))] = &CollisionHandling::ignore;
-    phm[Key(typeid(RegularBall), typeid(RegularBall))] = &CollisionHandling::ignore;
-    phm[Key(typeid(Player),      typeid(RegularBall))] = &CollisionHandling::ignore;  // currently!
-    phm[Key(typeid(RegularBall), typeid(Player))]      = &CollisionHandling::ignore;  // currently!
-    phm[Key(typeid(Player),      typeid(RegularShot))] = &CollisionHandling::ignore;  // currently!
-    phm[Key(typeid(RegularShot), typeid(Player))]      = &CollisionHandling::ignore;  // currently!
+    phm[Key(typeid(RegularBall),   typeid(RegularShot))]   = &CollisionHandling::ballShot;
+    phm[Key(typeid(RegularShot),   typeid(RegularBall))]   = &CollisionHandling::shotBall;
+    phm[Key(typeid(RegularShot),   typeid(RegularShot))]   = &CollisionHandling::ignore;
+    phm[Key(typeid(RegularBall),   typeid(RegularBall))]   = &CollisionHandling::ignore;
+    phm[Key(typeid(Player),        typeid(RegularBall))]   = &CollisionHandling::ignore;  // currently!
+    phm[Key(typeid(RegularBall),   typeid(Player))]        = &CollisionHandling::ignore;  // currently!
+    phm[Key(typeid(Player),        typeid(RegularShot))]   = &CollisionHandling::ignore;  
+    phm[Key(typeid(RegularShot),   typeid(Player))]        = &CollisionHandling::ignore;  
+
+    phm[Key(typeid(BreakableTile), typeid(Player))]        = &CollisionHandling::ignore;  // currently!
+    phm[Key(typeid(Player),        typeid(BreakableTile))] = &CollisionHandling::ignore;  // currently!
+    phm[Key(typeid(RegularBall),   typeid(BreakableTile))] = &CollisionHandling::ballBreakableTile; 
+    phm[Key(typeid(BreakableTile), typeid(RegularBall))]   = &CollisionHandling::BreakableTileBall;  
+
+    phm[Key(typeid(RegularShot),   typeid(BreakableTile))] = &CollisionHandling::shotBreakableTile;
+    phm[Key(typeid(BreakableTile), typeid(RegularShot))]   = &CollisionHandling::breakableTileShot;
+
     /*
     phm[Key(typeid(SpaceShip), typeid(SpaceShip))] = &shipShip;
     phm[Key(typeid(Asteroid), typeid(SpaceShip))] = &asteroidShip;
