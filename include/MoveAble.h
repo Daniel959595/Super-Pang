@@ -8,7 +8,7 @@ public:
 	MoveAble(Resources::Objects object, Direction dir, sf::Time animationTime);
 	virtual ~MoveAble() = 0 {};
 
-	virtual void update(sf::Time delta) = 0;
+	//virtual void update(sf::Time delta) = 0;
 	virtual void borderCollision(sf::RectangleShape& border);
 	//void direction(sf::Keyboard::Key key);
 	virtual void analizeCollision(GameObj& other);

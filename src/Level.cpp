@@ -173,6 +173,9 @@ void Level::update()
 		(*b).update(delta);
 	}
 	m_player.update(delta);
+	for (auto& t : m_tiles) {
+		(*t).update(delta);
+	}
 }
 
 void Level::ballShot(BaseBall& ball)

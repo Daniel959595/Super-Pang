@@ -83,7 +83,7 @@ namespace
         auto tile = AnimationData{};
 
         auto size = sf::Vector2i(34, 9);
-        const auto step = sf::Vector2i(6, 0);
+        const auto step = sf::Vector2i(40, 0);
         const auto initSpace = sf::Vector2i(7, 618);
 
         auto currentStart = initSpace;

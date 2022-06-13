@@ -1,7 +1,7 @@
 #include "BaseTile.h"
 
 
-const auto AnimationTime = sf::seconds(0.1f);
+const auto AnimationTime = sf::seconds(0.02f);
 
 BaseTile::BaseTile(TileColor color, TileSize size, sf::Vector2f pos, Resources::Objects tileType, Direction dir)
 	: m_tileType(tileType), Unmovable(tileType, dir, AnimationTime)
@@ -14,13 +14,13 @@ BaseTile::BaseTile(TileColor color, TileSize size, sf::Vector2f pos, Resources::
 sf::Color BaseTile::getColor(TileColor color)
 {
 	static std::vector<sf::Color> m_colors = { sf::Color(200,0,0),
-											   sf::Color(0,200,0),
+											   sf::Color(0,120,0),
 											   sf::Color(153,255,255),
 											   sf::Color(102,0,51) };
 
 	switch (color)
 	{
-	case TileColor::Blue:   return m_colors[2];
+	case TileColor::Blue:   return m_colors[1];
 	case TileColor::Orange: return m_colors[3];
 	case TileColor::Red:    return m_colors[0];
 	default:
