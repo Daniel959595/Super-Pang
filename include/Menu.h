@@ -32,4 +32,6 @@ private:
 
 	//std::vector<std::unique_ptr<BaseButton*>> m_buttons;
 	std::vector<std::unique_ptr<BaseButton>> m_buttons;
+
+	bool m_exit = false;
 };

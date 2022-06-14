@@ -20,7 +20,7 @@ void BreakableTile::update(sf::Time delta)
 		m_toatalTime = 0;
 		static int i = 0;
 		i++;
-		if (i == 4)
+		if (i %4 == 0)
 			m_isDisposed = true;
 		m_animation.update(delta);
 	}

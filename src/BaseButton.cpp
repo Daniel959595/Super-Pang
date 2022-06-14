@@ -1,6 +1,7 @@
 #include "BaseButton.h"
 
 BaseButton::BaseButton(sf::Vector2f pos, std::string str)
+	: m_font(Resources::instance().getFont())
 {
 	setRect(pos);
 	setFontAndText(str);
@@ -26,11 +27,12 @@ void BaseButton::setRect(sf::Vector2f pos)
 
 void BaseButton::setFontAndText(std::string str)
 {
-	m_font.loadFromFile("Retro.ttf");
 	m_text.setFont(m_font);
 	m_text.setString(str);
-	m_text.setCharacterSize(50);
-	m_text.setFillColor(sf::Color::Red);
+	m_text.setCharacterSize(80);
+	m_text.setFillColor(sf::Color::Black);
+	m_text.setOutlineThickness(3);
+	m_text.setOutlineColor(sf::Color{ 0,102,102 });
 
 	float x = m_rect.getGlobalBounds().left + ((BUTTON_WIDTH - m_text.getGlobalBounds().width) / 2);
 	float y = m_rect.getGlobalBounds().top + ((BUTTON_HEIGHT - m_text.getGlobalBounds().height) / 2);

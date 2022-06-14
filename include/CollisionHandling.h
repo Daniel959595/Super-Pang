@@ -26,10 +26,12 @@ private:
     void ballShot         (GameObj& baseBall, GameObj& baseShot);
     void shotBall         (GameObj& baseShot, GameObj& baseBall);
     void ballBreakableTile(GameObj& baseBall, GameObj& Tile);
-    void BreakableTileBall(GameObj& Tile,     GameObj& baseBall);
-    
-    void shotBreakableTile(GameObj& shot, GameObj& tile);
-    void breakableTileShot(GameObj& tile, GameObj& shot);
+    void BreakableTileBall(GameObj& Tile,     GameObj& baseBall); 
+    void shotBreakableTile(GameObj& shot,     GameObj& tile);
+    void breakableTileShot(GameObj& tile,     GameObj& shot);
+
+    void playerBall       (GameObj& player,   GameObj& ball);
+    void ballPlayer       (GameObj& ball,     GameObj& player);
 
 private:
     Level& m_gameLevel;

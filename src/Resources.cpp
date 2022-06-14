@@ -101,8 +101,6 @@ namespace
 
         return tile;
     }
-
-
 }
 
 
@@ -115,6 +113,14 @@ Resources& Resources::instance()
 const sf::Texture& Resources::texture(Objects object) const
 {
     return m_textures[object];
+}
+
+const sf::Font& Resources::getFont()
+{
+    if (m_font.getInfo().family.empty())
+        m_font.loadFromFile("Neon.otf");
+    return m_font;
+    
 }
 
 Resources::Resources()

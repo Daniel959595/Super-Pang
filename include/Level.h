@@ -4,7 +4,6 @@
 
 #include "Utilities.h"
 #include "Player.h"
-//#include "BaseBall.h"
 #include "RegularBall.h"
 #include "BreakableTile.h"
 #include "CollisionHandling.h"
@@ -18,26 +17,33 @@ public:
 	
 	Level();
 
-	void loadLevel(int levelIndex);
-	//void resetLevel();
-	void runLevel(sf::RenderWindow& window);
+	void loadLevel            (int levelIndex);
+	void resetLevel           (Situation& situation);
+	void runLevel             (sf::RenderWindow& window, Situation& situation);
 
-	void ballShot(BaseBall& ball);
+	void ballShot             (BaseBall& ball);
 
 private:
-	void setBackgroundRects();
-	void setBackground(int levelIndex);
-	void loadBalls();
-	void setBorders();
-	void draw(sf::RenderWindow& window);
-	void handleEvents(sf::RenderWindow& window);
-	void handleCollision();
-	void borderCollision();
-	void checkCollision(GameObj& obj);
-	void addBalls();
-	void eraseDisposed();
-	void update();
-
+	void setBackgroundRects   ();
+	void setBackground        (int levelIndex);
+	void setText              ();
+	void setTextPos           ();
+	void updateText           ();
+	void loadBalls            ();
+	void setPlayerPos         ();
+	void setBorders           ();
+	
+	void draw                 (sf::RenderWindow& window);
+	void handleEvents         (sf::RenderWindow& window, Situation& situation);
+	void handleCollisions     ();
+	void borderCollision      ();
+	void update               ();
+	void checkCollision       (GameObj& obj);
+	void addItems             ();
+	void addScore();
+	void eraseDisposed        ();
+	void checkLevelStatus     (Situation& situation);
+	
 
 public:
 
@@ -51,14 +57,15 @@ private:
 	sf::Clock m_clock = sf::Clock();
 
 	int m_levelIndex;
+	sf::Text m_text;
+	const sf::Font& m_font;
 
 	CollisionHandling m_collisionHandler;
 
 	Player m_player;
 	BallsData m_balls;
 	TilesData m_tiles;
-	//std::vector<Ball> m_balls;
-	//std::vector<Tile> m_tiles;
+	
 	//std::vector<Gift> m_gifts;
 
 	//sf::Sprite m_backGround;

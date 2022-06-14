@@ -66,6 +66,21 @@ void CollisionHandling::breakableTileShot(GameObj& tile, GameObj& shot)
     shotBreakableTile(shot, tile);
 }
 
+void CollisionHandling::playerBall(GameObj& player, GameObj& ball)
+{
+    Player& gamePlayer = dynamic_cast<Player&>(player);
+    BaseBall& gameBall = dynamic_cast<BaseBall&>(ball);
+
+    gamePlayer.removeLife();
+    gamePlayer.setIsDisposed(true);
+}
+
+void CollisionHandling::ballPlayer(GameObj& ball, GameObj& player)
+{
+    playerBall(player, ball);
+}
+
+
 CollisionHandling::HitMap CollisionHandling::initializeCollisionMap()
 {
     HitMap phm;
@@ -73,8 +88,8 @@ CollisionHandling::HitMap CollisionHandling::initializeCollisionMap()
     phm[Key(typeid(RegularShot),   typeid(RegularBall))]   = &CollisionHandling::shotBall;
     phm[Key(typeid(RegularShot),   typeid(RegularShot))]   = &CollisionHandling::ignore;
     phm[Key(typeid(RegularBall),   typeid(RegularBall))]   = &CollisionHandling::ignore;
-    phm[Key(typeid(Player),        typeid(RegularBall))]   = &CollisionHandling::ignore;  // currently!
-    phm[Key(typeid(RegularBall),   typeid(Player))]        = &CollisionHandling::ignore;  // currently!
+    phm[Key(typeid(Player),        typeid(RegularBall))]   = &CollisionHandling::playerBall;  
+    phm[Key(typeid(RegularBall),   typeid(Player))]        = &CollisionHandling::ballPlayer;  
     phm[Key(typeid(Player),        typeid(RegularShot))]   = &CollisionHandling::ignore;  
     phm[Key(typeid(RegularShot),   typeid(Player))]        = &CollisionHandling::ignore;  
 

@@ -9,7 +9,7 @@ Menu::Menu()
 
 void Menu::handleMenu(sf::RenderWindow& window, sf::View& view)
 {
-	while (window.isOpen()) {
+	while (window.isOpen() && ! m_exit) {
 		draw(window);
 		handleEvents(window, view);
 	}
@@ -43,9 +43,9 @@ void Menu::draw(sf::RenderWindow& window)
 
 void Menu::handleEvents(sf::RenderWindow& window, sf::View& view)
 {
+    sf::Vector2f location;
     if (auto event = sf::Event{}; window.waitEvent(event))
     {
-        sf::Vector2f location;
         switch (event.type)
         {
         case sf::Event::Closed:
@@ -53,11 +53,12 @@ void Menu::handleEvents(sf::RenderWindow& window, sf::View& view)
         case sf::Event::Resized:
             resizeView(window, view, event); break;
         case sf::Event::MouseButtonReleased:
-            location = window.mapPixelToCoords(
-                { event.mouseButton.x, event.mouseButton.y });
-            handleClick(location);
-            break;
-
+            location = window.mapPixelToCoords({ event.mouseButton.x, event.mouseButton.y });
+            handleClick(location); break;
+        case sf::Event::KeyPressed:
+            if (event.key.code == sf::Keyboard::Escape) {
+                m_exit = true; break;
+            }
         }
     }
 }

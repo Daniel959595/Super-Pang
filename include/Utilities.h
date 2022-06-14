@@ -11,7 +11,7 @@
 #define WINDOW_HEIGHT 1000
 
 #define BUTTON_WIDTH 300
-#define BUTTON_HEIGHT 50
+#define BUTTON_HEIGHT 80
 
 #define BACBGROUND_WIDTH 1400
 #define BACBGROUND_HEIGHT 900
@@ -20,6 +20,11 @@
 #define TABLE_HEIGHT 830
 
 #define FRAME_WIDTH 35
+
+#define PLAYER_WIDTH 32
+#define PLAYER_HIEGHT 32
+
+#define DEFAULT_LIFE 6
 
 #define BIG_BALL_SIZE 170
 #define MEDIUM_BALL_SIZE 140
@@ -34,6 +39,17 @@
 #define BIG_TILE_SIZE 170
 #define MEDIUM_TILE_SIZE 140
 #define SMALL_TILE_SIZE 110
+
+enum class Situation
+{
+	//GameBegan,
+	LevelRunnig,
+	LevelSucced,
+	LevelFailed,
+	GameOver,
+	GameFinished,
+	EscKeyPressed,
+};
 
 enum class MixDirection {
 	UpAndLeft = 0,

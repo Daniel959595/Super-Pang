@@ -25,18 +25,21 @@ public:
     Resources(const Resources&) = delete;
     Resources& operator=(const Resources&) = delete;
 
-    //const sf::Texture& texture() const { return m_texture; }
     const sf::Texture& texture(Objects object) const;
     const AnimationData& animationData(Objects object) { return m_data[object]; }
+
+    const sf::Font& getFont();
 
 private:
     Resources();
     void loadTextures();
+
 public:
 
 private:
 
-    //sf::Texture m_texture;
+    sf::Font m_font;
+
     std::vector<sf::Texture> m_textures;
     std::vector<AnimationData> m_data;
 };

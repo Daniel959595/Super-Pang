@@ -22,6 +22,6 @@ public:
 
 private:
 	sf::RectangleShape m_rect;
-	sf::Font m_font;
+	const sf::Font& m_font;
 	sf::Text m_text;
 };
