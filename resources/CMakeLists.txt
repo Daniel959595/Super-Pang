@@ -8,3 +8,7 @@ configure_file ("Shot2.png" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Ball.png" ${CMAKE_BINARY_DIR} COPYONLY)
 #configure_file ("RobertKenedy.ttf" ${CMAKE_BINARY_DIR} COPYONLY)
 configure_file ("Neon.otf" ${CMAKE_BINARY_DIR} COPYONLY)
+
+configure_file ("level_1.txt"  ${CMAKE_BINARY_DIR} COPYONLY)
+configure_file ("level_2.txt"  ${CMAKE_BINARY_DIR} COPYONLY)
+

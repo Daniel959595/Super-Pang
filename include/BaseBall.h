@@ -15,6 +15,9 @@ public:
 	virtual pair split() = 0;
 	BallSize getBallSize() const;
 
+	virtual bool isCollide(const GameObj& other); //override;
+	virtual void fixCollision(const GameObj& other) override;
+
 protected:
 	sf::Vector2f getScaleFactors(BallSize size) const;
 	float getDesireSize(BallSize size) const;
@@ -24,6 +27,10 @@ protected:
 	float maxVelocity(BallSize size);
 	virtual void moveInside(sf::RectangleShape& border);
 
+	virtual bool analizeCollision(const GameObj& other) override;
+	virtual bool getNewDirect(const GameObj& other);
+	bool isInRadius(const GameObj& other);
+	bool checkDistance(const sf::Vector2f corner);
 
 	BallSize getSmallerSize();
 
@@ -38,6 +45,7 @@ protected:
 	float m_moveTime = 0.02f;
 	float m_toatalTime = 0.0f;
 
+	MixDirection m_newDirection;
 	bool m_newBall = false;    // i.e. if it was exist from the begining.
 };
 

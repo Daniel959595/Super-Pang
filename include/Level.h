@@ -8,6 +8,8 @@
 #include "BreakableTile.h"
 #include "CollisionHandling.h"
 
+#include <fstream>
+
 using BallsData = std::vector<std::shared_ptr<BaseBall>>;
 using TilesData = std::vector<std::shared_ptr<BaseTile>>;
 
@@ -29,7 +31,14 @@ private:
 	void setText              ();
 	void setTextPos           ();
 	void updateText           ();
-	void loadBalls            ();
+	//void loadBalls            ();
+	void loadFromfile         ();
+	void openFile             (std::ifstream& in);
+	void closeFile            (std::ifstream& in);
+	void loadObjects          (std::ifstream& in);
+	void addObj               (int objNum, float xCord, float yCord);
+	void addBall			  (sf::Vector2f& pos, Resources::Objects ballType);
+	void addTile			  (sf::Vector2f& pos, Resources::Objects tileType);
 	void setPlayerPos         ();
 	void setBorders           ();
 	

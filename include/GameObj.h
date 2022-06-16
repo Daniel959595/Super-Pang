@@ -17,8 +17,8 @@ public:
 	virtual void draw(sf::RenderWindow& window);
 	virtual void update(sf::Time delta) = 0;
 
-	virtual bool checkCollision(const GameObj& other) const;   // call to other.isCollide().
-	virtual bool isCollide(const GameObj& other) const;
+	virtual bool checkCollision(const GameObj& other) ;   // call to other.isCollide(). const
+	virtual bool isCollide(const GameObj& other) ;//const
 
 	const sf::FloatRect& getGlobalBounds() const { return m_sprite.getGlobalBounds(); }
 

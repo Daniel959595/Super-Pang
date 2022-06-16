@@ -11,13 +11,13 @@ public:
 	//virtual void update(sf::Time delta) = 0;
 	virtual void borderCollision(sf::RectangleShape& border);
 	//void direction(sf::Keyboard::Key key);
-	virtual void analizeCollision(GameObj& other);
+	virtual bool analizeCollision(const GameObj& other) { return true; };
 
 protected:
 	virtual void moveInside(sf::RectangleShape& border);
 	virtual void setDirection(Direction newDir);
-	virtual void fixCollision(MixDirection newDir, const GameObj& other);
-	MixDirection getCollisionSide(const GameObj& other);
+	virtual void fixCollision(const GameObj& other) {};
+	//virtual MixDirection getCollisionSide(const GameObj& other) {};
 public:
 
 protected:

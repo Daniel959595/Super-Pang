@@ -1,6 +1,9 @@
 #include "Level.h"
 #include "CollisionHandling.h"
 
+
+
+
 const auto TextSize = 50;
 
 Level::Level() 
@@ -26,13 +29,76 @@ void Level::loadLevel(int levelIndex)
 	m_levelIndex = levelIndex;
 	setBackground(levelIndex);
 	updateText();
-	loadBalls();
-	setPlayerPos();
+	loadFromfile();
+	//setPlayerPos();
+}
+
+void Level::loadFromfile()
+{
+	static std::ifstream in;
+	openFile(in);
+	loadObjects(in);
+	closeFile(in);
+}
+
+void Level::openFile(std::ifstream& in)
+{
+	static std::string fileName;
+    fileName = { "level_" + std::to_string(m_levelIndex) + ".txt" };
+	
+	in.open(fileName);
+	if (!in) 
+		m_levelIndex++;//exeption!
+}
+
+void Level::closeFile(std::ifstream& in)
+{
+	in.close();
+}
+
+void Level::loadObjects(std::ifstream& in)
+{
+	int objNum;
+	float xCord, yCord;
+
+	in >> objNum >> xCord >> yCord;
+	while (in) {
+		addObj(objNum, xCord, yCord);
+		in >> objNum >> xCord >> yCord;
+	}
+}
+
+void Level::addObj(int objNum, float xCord, float yCord)
+{
+	static sf::Vector2f pos;
+	pos = { xCord,yCord };
+	switch (objNum)
+	{
+	case Resources::Objects::Player:         setPlayerPos(); break;
+	case Resources::Objects::RegularBall:    addBall(pos, Resources::Objects(objNum)); break;
+	case Resources::Objects::BreakableTile:  addTile(pos, Resources::Objects(objNum)); break;
+	default:
+		break;
+	}
+}
+
+void Level::addBall(sf::Vector2f& pos, Resources::Objects ballType)
+{
+	if (ballType == Resources::Objects::RegularBall)
+		m_balls.emplace_back(std::shared_ptr<RegularBall>(new RegularBall(BallSize::Big, pos, Direction::Left, false)));
+	//else
+}
+
+void Level::addTile(sf::Vector2f& pos, Resources::Objects tileType)
+{
+	if (tileType == Resources::Objects::BreakableTile)
+		m_tiles.emplace_back(std::shared_ptr<BreakableTile>(new BreakableTile(TileColor::Blue, TileSize::Big, pos, Direction::Stay)));
+	//else
 }
 
 void Level::setBackground(int levelIndex)
 {
-	m_sprite.setTextureRect(m_backgroundsRects[levelIndex]);
+	m_sprite.setTextureRect(m_backgroundsRects[levelIndex - 1]);//-1
 	if (m_sprite.getScale() == sf::Vector2f(1, 1)) {
 		float factorX = WINDOW_WIDTH / m_sprite.getGlobalBounds().width;
 		float factorY = BACBGROUND_HEIGHT / m_sprite.getGlobalBounds().height;
@@ -60,20 +126,6 @@ void Level::updateText()
 {
 	m_text.setString("Level No." + std::to_string(m_levelIndex));
 	setTextPos();
-}
-
-void Level::loadBalls()
-{
-	float x = (BACBGROUND_WIDTH / 2) - (BIG_BALL_SIZE / 2);
-	float y = BACBGROUND_HEIGHT / 3 - (BIG_BALL_SIZE / 2);
-
-	auto pos = sf::Vector2f(x, y);
-	m_balls.emplace_back(std::shared_ptr<RegularBall>(new RegularBall(BallSize::Big, pos, Direction::Left, false)));
-
-	/*for (int i = 0; i < (int)BACBGROUND_WIDTH / MEDIUM_TILE_SIZE; i++) {
-		pos = sf::Vector2f(FRAME_WIDTH + (i * MEDIUM_TILE_SIZE), (BACBGROUND_HEIGHT / 3) * 2);
-		m_tiles.emplace_back(std::shared_ptr<BreakableTile>(new BreakableTile(TileColor::Blue, TileSize::Big, pos, Direction::Stay)));
-	}*/
 }
 
 void Level::setPlayerPos()

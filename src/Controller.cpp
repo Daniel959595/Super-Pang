@@ -50,7 +50,7 @@ void Controller::displayMessage(int levelIndex, Situation& situation)
 	std::this_thread::sleep_for(3s);
 }
 
-void Controller::handleSituation()
+void Controller::handleSituation() //switch!!!
 {
 	if (m_situation == Situation::LevelSucced)
 	{
@@ -67,6 +67,7 @@ void Controller::handleSituation()
 	else if (m_situation == Situation::GameFinished) {
 		displayMessage(m_levelIndex, m_situation);
 		m_levelsHandler.resetLevel(m_situation);
+		m_levelIndex = 1;
 		m_returnToMenu = true;
 	}
 	

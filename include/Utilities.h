@@ -5,7 +5,7 @@
 #include "Direction.h"
 #include "Resources.h"
 
-#define NUM_LEVELS 1
+#define NUM_LEVELS 2
 
 #define WINDOW_WIDTH  1400
 #define WINDOW_HEIGHT 1000
@@ -16,29 +16,31 @@
 #define BACBGROUND_WIDTH 1400
 #define BACBGROUND_HEIGHT 900
 
+#define FRAME_WIDTH 35
+
 #define TABLE_WIDTH 1370
 #define TABLE_HEIGHT 830
 
-#define FRAME_WIDTH 35
 
-#define PLAYER_WIDTH 32
+#define PLAYER_WIDTH  32
 #define PLAYER_HIEGHT 32
 
 #define DEFAULT_LIFE 6
 
-#define BIG_BALL_SIZE 170
+#define BIG_BALL_SIZE    170
 #define MEDIUM_BALL_SIZE 140
-#define SMALL_BALL_SIZE 110
+#define SMALL_BALL_SIZE  110
 
 
-#define BIG_BALL_SIZE 170
+#define BIG_BALL_SIZE    170
 #define MEDIUM_BALL_SIZE 140
-#define SMALL_BALL_SIZE 110
+#define SMALL_BALL_SIZE  110
 
 
-#define BIG_TILE_SIZE 170
+#define BIG_TILE_SIZE    170
 #define MEDIUM_TILE_SIZE 140
-#define SMALL_TILE_SIZE 110
+#define SMALL_TILE_SIZE  110
+#define TINY_TILE_SIZE   110
 
 enum class Situation
 {
@@ -60,6 +62,7 @@ enum class MixDirection {
 	Down, 
 	Right,
 	Left,
+	Unkown, // 
 };
 
 enum class ButtonType {
