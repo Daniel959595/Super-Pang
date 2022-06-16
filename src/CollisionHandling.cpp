@@ -43,17 +43,17 @@ void CollisionHandling::shotBall(GameObj& baseshot, GameObj& baseBall)
    
 void CollisionHandling::ballBreakableTile(GameObj& baseBall, GameObj& Tile)
 {
-    BaseBall& ball      = dynamic_cast<BaseBall&>(baseBall);
-    BreakableTile& tile = dynamic_cast<BreakableTile&>(Tile);
+    /*BaseBall& ball      = dynamic_cast<BaseBall&>(baseBall);
+    BreakableTile& tile = dynamic_cast<BreakableTile&>(Tile);*/
 
     //ball.analizeCollision(Tile);
-    ball.fixCollision(tile);
+    //ball.fixCollision(tile);
     //tile.setIsDisposed(true);
 }
 
 void CollisionHandling::BreakableTileBall(GameObj& Tile, GameObj& baseBall)
 {
-    ballBreakableTile(baseBall, Tile);
+    /*ballBreakableTile(baseBall, Tile);*/
 }
 
 void CollisionHandling::shotBreakableTile(GameObj& shot, GameObj& tile)

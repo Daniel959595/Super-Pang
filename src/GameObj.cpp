@@ -16,7 +16,7 @@ bool GameObj::checkCollision(const GameObj& other)
 	return isCollide(other);
 }
 
-bool GameObj::isCollide(const GameObj& other) 
+bool GameObj::isCollide(const GameObj& other) const
 {
 	auto thisRect = m_sprite.getGlobalBounds();
 	auto otherRect = other.getGlobalBounds();

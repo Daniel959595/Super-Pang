@@ -65,6 +65,14 @@ enum class MixDirection {
 	Unkown, // 
 };
 
+enum class TileCorner {
+	UpRight,
+	UpLeft,
+	DownLeft,
+	DownRight,
+	Middle,
+};
+
 enum class ButtonType {
 	START = 0,
 	HELP,

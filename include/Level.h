@@ -45,6 +45,7 @@ private:
 	void draw                 (sf::RenderWindow& window);
 	void handleEvents         (sf::RenderWindow& window, Situation& situation);
 	void handleCollisions     ();
+	void handleBallsCollision ();
 	void borderCollision      ();
 	void update               ();
 	void checkCollision       (GameObj& obj);

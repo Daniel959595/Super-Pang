@@ -1,5 +1,7 @@
 #include "BaseBall.h"
 #include "RegularBall.h"
+#include "BreakableTile.h"
+
 #include <ctime>
 #include <cmath>
 
@@ -125,92 +127,98 @@ BallSize BaseBall::getSmallerSize()
 	}
 }
 
-bool BaseBall::isCollide(const GameObj& other) 
+void BaseBall::setQuartes(const GameObj& other)
 {
 	if (GameObj::isCollide(other))
-		return analizeCollision(other);
+		analizeCollision(other);	
+}
+
+bool BaseBall::isCollide() const
+{
+	if (m_quarters[0] == 1 || m_quarters[1] == 1 ||
+		m_quarters[2] == 1 || m_quarters[3] == 1)
+		return true;
 	return false;
 }
 
-bool BaseBall::analizeCollision(const GameObj& other)
+bool BaseBall::isCollide(const GameObj& other) const
 {
-	auto thisRect = this->getGlobalBounds();
-	auto otherRect = other.getGlobalBounds();
-
-	if (getNewDirect(other))
-		return isInRadius(other);
-	//fixCollision(other);
-	return false;
+	return GameObj::isCollide(other);
 }
 
-bool BaseBall::getNewDirect(const GameObj& other)
+void BaseBall::analizeCollision(const GameObj& other)
 {
-	auto thisRect = this->getGlobalBounds();
-	auto otherRect = other.getGlobalBounds();
+	auto &thisRect  = this->getGlobalBounds();
+	auto &otherRect = other.getGlobalBounds();
 
-	auto size = sf::Vector2f(thisRect.width / 2, thisRect.height / 2);
+	setQuartesPos();
+	checkQuartes(other);
 
-	auto fstQurter = sf::FloatRect(sf::Vector2f(thisRect.left + (thisRect.width) / 2, thisRect.top), size);
-	auto scdQurter = sf::FloatRect(sf::Vector2f(thisRect.left, thisRect.top), size);
-	auto trdQurter = sf::FloatRect(sf::Vector2f(thisRect.left, thisRect.top + (thisRect.height / 2)), size);
-	auto frtQurter = sf::FloatRect(sf::Vector2f(thisRect.left + (thisRect.width) / 2, thisRect.top + (thisRect.height / 2)), size);
-
-	m_newDirection = MixDirection::Unkown;
-
-	if (fstQurter.intersects(otherRect) && scdQurter.intersects(otherRect)) // top collisoin.
-		m_newDirection = MixDirection::Down;
-	else if (fstQurter.intersects(otherRect) && frtQurter.intersects(otherRect)) // right collision.
-		m_newDirection = MixDirection::Left;
-	else if (fstQurter.intersects(otherRect)) {
-		if (m_velocity.y >= 0)
-			m_newDirection = MixDirection::Left;
-		else
-			m_newDirection = MixDirection::DownAndLeft;
-	}
-	else if (scdQurter.intersects(otherRect) && trdQurter.intersects(otherRect)) // left collision.
-		m_newDirection = MixDirection::Right;
-	else if (scdQurter.intersects(otherRect)) {
-		if (m_velocity.y >= 0)
-			m_newDirection = MixDirection::Right;
-		else
-			m_newDirection = MixDirection::DownAndRight;
-	}
-	else if (trdQurter.intersects(otherRect) && frtQurter.intersects(otherRect)) // bottom collision.
-		m_newDirection = MixDirection::Up;
-	else if (trdQurter.intersects(otherRect)) {
-		if (m_velocity.y >= 0)
-			m_newDirection = MixDirection::UpAndRight;
-		else
-			m_newDirection = MixDirection::Right;
-	}
-	else if (frtQurter.intersects(otherRect)) {
-		if (m_velocity.y >= 0)
-			m_newDirection = MixDirection::UpAndLeft;
-		else
-			m_newDirection = MixDirection::Left;
-	}
-	return (m_newDirection == MixDirection::Unkown ? false : true);
 }
 
-bool BaseBall::isInRadius(const GameObj& other)
+void BaseBall::setQuartesPos()
+{
+	auto& thisRect = this->getGlobalBounds();
+	static auto size = sf::Vector2f(thisRect.width / 2, thisRect.height / 2);
+
+	fstQurter = sf::FloatRect(sf::Vector2f(thisRect.left + (thisRect.width) / 2, thisRect.top), size);
+	scdQurter = sf::FloatRect(sf::Vector2f(thisRect.left, thisRect.top), size);
+	trdQurter = sf::FloatRect(sf::Vector2f(thisRect.left, thisRect.top + (thisRect.height / 2)), size);
+	frtQurter = sf::FloatRect(sf::Vector2f(thisRect.left + (thisRect.width) / 2, thisRect.top + (thisRect.height / 2)), size);
+}
+
+void BaseBall::checkQuartes(const GameObj& other)
+{
+	auto thisRect  = this->getGlobalBounds();
+	auto otherRect = other.getGlobalBounds();
+
+	if (fstQurter.intersects(otherRect) && scdQurter.intersects(otherRect)) {      // top collisoin.
+		m_quarters[0] = 1; m_quarters[1] = 1;
+	}
+	else if (scdQurter.intersects(otherRect) && trdQurter.intersects(otherRect)) { // left collision.		
+		m_quarters[1] = 1; m_quarters[2] = 1;
+	}
+	else if (trdQurter.intersects(otherRect) && frtQurter.intersects(otherRect)) { // bottom collision.
+		m_quarters[2] = 1; m_quarters[3] = 1;
+	}
+	else if (frtQurter.intersects(otherRect) && fstQurter.intersects(otherRect)) { // right collision.
+		m_quarters[3] = 1; m_quarters[0] = 1;
+	}
+	else if (fstQurter.intersects(otherRect)) {                                  // top right collision.
+		if (isInRadius(other, TileCorner::DownLeft))
+			m_quarters[0] = 1;
+	}
+	else if (scdQurter.intersects(otherRect)) {                                     // top left collision.
+		if (isInRadius(other, TileCorner::DownRight))
+			m_quarters[1] = 1;
+	}
+	else if (trdQurter.intersects(otherRect)) {                                     // bottom left collision.
+		if (isInRadius(other, TileCorner::UpRight))
+			m_quarters[2] = 1;
+	}
+	else if (frtQurter.intersects(otherRect)) {                                     // bottom right collision.
+		if (isInRadius(other, TileCorner::UpLeft))
+			m_quarters[3] = 1;
+	}
+}
+
+
+bool BaseBall::isInRadius(const GameObj& other, TileCorner corner)
 {
 	auto otherBounds = other.getGlobalBounds();
-	switch (m_newDirection)
+	switch (corner)
 	{
-	case MixDirection::Up:
-	case MixDirection::Down:
+	case TileCorner::Middle:
 		return true;
-	case MixDirection::UpAndLeft:
+	case TileCorner::UpLeft:
 		return checkDistance(sf::Vector2f(otherBounds.left, otherBounds.top)); 
-	case MixDirection::UpAndRight:
+	case TileCorner::UpRight:
 		return checkDistance(sf::Vector2f(otherBounds.left + otherBounds.width, otherBounds.top)); 
-	case MixDirection::DownAndLeft:
+	case TileCorner::DownLeft:
 		return checkDistance(sf::Vector2f(otherBounds.left, otherBounds.top + otherBounds.height));
-	case MixDirection::DownAndRight:
+	case TileCorner::DownRight:
 		return checkDistance(sf::Vector2f(otherBounds.left + otherBounds.width, otherBounds.top + otherBounds.height));
-	case MixDirection::Right:
-	case MixDirection::Left:
-	case MixDirection::Unkown:
+	
 	default:
 		return true;
 	}
@@ -218,7 +226,7 @@ bool BaseBall::isInRadius(const GameObj& other)
 
 bool BaseBall::checkDistance(const sf::Vector2f corner)
 {
-	auto thisBounds = this->getGlobalBounds();
+	auto &thisBounds = this->getGlobalBounds();
 	sf::Vector2f ballCenter = { thisBounds.left + (thisBounds.width / 2), thisBounds.top + (thisBounds.height / 2) };
 
 	auto radius = thisBounds.width / 2;
@@ -228,30 +236,53 @@ bool BaseBall::checkDistance(const sf::Vector2f corner)
 	return (distance <= radius ? true:false);
 }
 
-void BaseBall::fixCollision(const GameObj& other)
+void BaseBall::fixCollision()
 {
 	auto thisBounds = m_sprite.getGlobalBounds();
-	auto otherBounds = other.getGlobalBounds();
-
+	m_newDirection = getNewDirect();
 	switch (m_newDirection)
 	{
-	case MixDirection::Up:   m_sprite.setPosition(thisBounds.left, otherBounds.top - thisBounds.height);
-		this->setDirection(Direction::Up);   m_velocity.y *= -1; break;
-	case MixDirection::UpAndLeft:  m_sprite.setPosition(thisBounds.left, otherBounds.top - thisBounds.height);
-		this->setDirection(Direction::Up);   m_velocity.y *= -1; (m_velocity.x > 0 ? m_velocity.x *= -1 : m_velocity.x *= 1); break;
-	case MixDirection::UpAndRight: m_sprite.setPosition(thisBounds.left, otherBounds.top - thisBounds.height);
-		this->setDirection(Direction::Up);   m_velocity.y *= -1; (m_velocity.x < 0 ? m_velocity.x *= -1 : m_velocity.x *= 1); break;
-	case MixDirection::Down: m_sprite.setPosition(thisBounds.left, otherBounds.top + otherBounds.height);
-		this->setDirection(Direction::Down); m_velocity.y *= -1; break;
-	case MixDirection::DownAndRight: m_sprite.setPosition(thisBounds.left, otherBounds.top + otherBounds.height);
-		this->setDirection(Direction::Down); m_velocity.y *= -1; (m_velocity.x < 0 ? m_velocity.x *= -1 : m_velocity.x *= 1); break;
-	case MixDirection::DownAndLeft: m_sprite.setPosition(thisBounds.left, otherBounds.top + otherBounds.height);
-		this->setDirection(Direction::Down); m_velocity.y *= -1; (m_velocity.x > 0 ? m_velocity.x *= -1 : m_velocity.x *= 1); break;
-	case MixDirection::Right: m_sprite.setPosition(otherBounds.left + otherBounds.width, thisBounds.top);
-		this->setDirection(Direction::Right); m_velocity.x *= -1; break;
-	case MixDirection::Left: m_sprite.setPosition(otherBounds.left - thisBounds.width, thisBounds.top);
-		this->setDirection(Direction::Left); m_velocity.x *= -1; break;
+	case MixDirection::Up:                    m_sprite.setPosition(thisBounds.left, thisBounds.top + m_velocity.y * -1);
+		this->setDirection(Direction::Up);    m_velocity.y *= -1;															   break;
+	case MixDirection::UpAndLeft:             m_sprite.setPosition(thisBounds.left, thisBounds.top + m_velocity.y * -1);
+		this->setDirection(Direction::Up);    m_velocity.y *= -1; (m_velocity.x > 0 ? m_velocity.x *= -1 : m_velocity.x *= 1); break;
+	case MixDirection::UpAndRight:            m_sprite.setPosition(thisBounds.left, thisBounds.top + m_velocity.y * -1);
+		this->setDirection(Direction::Up);    m_velocity.y *= -1; (m_velocity.x < 0 ? m_velocity.x *= -1 : m_velocity.x *= 1); break;
+	case MixDirection::Down:                  m_sprite.setPosition(thisBounds.left, thisBounds.top + m_velocity.y * -1);
+		this->setDirection(Direction::Down);  m_velocity.y *= -1;															   break;
+	case MixDirection::DownAndRight:          m_sprite.setPosition(thisBounds.left, thisBounds.top + m_velocity.y * -1);
+		this->setDirection(Direction::Down);  m_velocity.y *= -1; (m_velocity.x < 0 ? m_velocity.x *= -1 : m_velocity.x *= 1); break;
+	case MixDirection::DownAndLeft:           m_sprite.setPosition(thisBounds.left, thisBounds.top + m_velocity.y * -1);
+		this->setDirection(Direction::Down);  m_velocity.y *= -1; (m_velocity.x > 0 ? m_velocity.x *= -1 : m_velocity.x *= 1); break;
+	case MixDirection::Right:                 m_sprite.setPosition(thisBounds.left + m_velocity.x * -1, thisBounds.top);
+		this->setDirection(Direction::Right); m_velocity.x *= -1;                                                              break;
+	case MixDirection::Left:                  m_sprite.setPosition(thisBounds.left + m_velocity.x * -1, thisBounds.top);
+		this->setDirection(Direction::Left);  m_velocity.x *= -1;															   break;
 	default:
 		break;
 	}
+	for (int i = 0; i < 4; i++) // func!!! resetQuarters()/
+		m_quarters[i] = 0;
+}
+
+MixDirection BaseBall::getNewDirect()
+{
+	if (m_quarters[0] == 1 && m_quarters[1] == 1 && m_quarters[2] == 0 && m_quarters[3] == 0)      // top collision.
+		return MixDirection::Down;
+	else if (m_quarters[0] == 0 && m_quarters[1] == 1 && m_quarters[2] == 1 && m_quarters[3] == 0) // left collision.
+		return MixDirection::Right;
+	else if (m_quarters[0] == 0 && m_quarters[1] == 0 && m_quarters[2] == 1 && m_quarters[3] == 1) // down collision.
+		return MixDirection::Up;
+	else if (m_quarters[0] == 1 && m_quarters[1] == 0 && m_quarters[2] == 0 && m_quarters[3] == 1) // right collision.
+		return MixDirection::Right;
+	else if (m_quarters[0] == 1 && m_quarters[1] == 0 && m_quarters[2] == 0 && m_quarters[3] == 0) // top right collision.
+		return (m_velocity.y >= 0 ? MixDirection::Left : MixDirection::DownAndLeft);
+	else if (m_quarters[0] == 0 && m_quarters[1] == 1 && m_quarters[2] == 0 && m_quarters[3] == 0) // top left collision.
+		return (m_velocity.y >= 0 ? MixDirection::Right : MixDirection::DownAndRight);
+	else if (m_quarters[0] == 0 && m_quarters[1] == 0 && m_quarters[2] == 1 && m_quarters[3] == 0) // bottom left collision.
+		return (m_velocity.y >= 0 ? MixDirection::UpAndRight : MixDirection::Right);
+	else if (m_quarters[0] == 0 && m_quarters[1] == 0 && m_quarters[2] == 0 && m_quarters[3] == 1) // bottom right collision.
+		return (m_velocity.y >= 0 ? MixDirection::UpAndLeft : MixDirection::Left);
+
+	return MixDirection::Up; // should never reach here.
 }

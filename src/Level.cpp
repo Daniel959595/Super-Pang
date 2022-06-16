@@ -205,16 +205,31 @@ void Level::handleEvents(sf::RenderWindow& window, Situation& situation)
 void Level::handleCollisions()
 {
 	borderCollision();
-
+	handleBallsCollision();
+	
 	checkCollision(m_player);
-
-	for (auto& b : m_balls) {
-		checkCollision(*b);
-	}
-
 	for (auto& s : m_player.getShots()) {
 		checkCollision(*s);
 	}
+}
+
+void Level::handleBallsCollision()
+{
+	for (auto& b : m_balls) 
+		for (auto& t : m_tiles) {
+			(*b).setQuartes(*t);
+		}
+	for (auto& b : m_balls) {
+		if ((*b).isCollide())
+			(*b).fixCollision();
+	}
+	for (auto& b : m_balls)
+		for (auto& s : m_player.getShots()) {
+			if ((*b).isCollide(*s)) {
+				m_collisionHandler.processCollision((*b), *s);
+				break;
+			}
+		}
 }
 
 void Level::borderCollision()

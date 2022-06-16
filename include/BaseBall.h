@@ -15,8 +15,10 @@ public:
 	virtual pair split() = 0;
 	BallSize getBallSize() const;
 
-	virtual bool isCollide(const GameObj& other); //override;
-	virtual void fixCollision(const GameObj& other) override;
+	void setQuartes(const GameObj& other);
+	virtual bool isCollide() const;
+	virtual bool isCollide(const GameObj& other) const override;
+	virtual void fixCollision();
 
 protected:
 	sf::Vector2f getScaleFactors(BallSize size) const;
@@ -27,9 +29,13 @@ protected:
 	float maxVelocity(BallSize size);
 	virtual void moveInside(sf::RectangleShape& border);
 
-	virtual bool analizeCollision(const GameObj& other) override;
-	virtual bool getNewDirect(const GameObj& other);
-	bool isInRadius(const GameObj& other);
+	virtual void analizeCollision(const GameObj& other) override;
+	//virtual bool getNewDirect(const GameObj& other);
+	virtual MixDirection getNewDirect();
+	void setQuartesPos();
+	void checkQuartes(const GameObj& other);
+
+	bool isInRadius(const GameObj& other, TileCorner corner);
 	bool checkDistance(const sf::Vector2f corner);
 
 	BallSize getSmallerSize();
@@ -40,13 +46,25 @@ public:
 protected:
 	BallSize m_ballSize;
 
-	//sf::Vector2f m_velocity;
 	float m_gravity = 1.f;
 	float m_moveTime = 0.02f;
 	float m_toatalTime = 0.0f;
 
+	// represent the quarters that 
+	// collide with other obj.
+	int m_quarters[4] = {};
+
+	sf::FloatRect fstQurter;
+	sf::FloatRect scdQurter;
+	sf::FloatRect trdQurter;
+	sf::FloatRect frtQurter;
+
+	bool m_isCollide = false;
+	
+	// if it was exist in the file or added later.
+	bool m_newBall = false;      
+
 	MixDirection m_newDirection;
-	bool m_newBall = false;    // i.e. if it was exist from the begining.
 };
 
 

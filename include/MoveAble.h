@@ -11,7 +11,7 @@ public:
 	//virtual void update(sf::Time delta) = 0;
 	virtual void borderCollision(sf::RectangleShape& border);
 	//void direction(sf::Keyboard::Key key);
-	virtual bool analizeCollision(const GameObj& other) { return true; };
+	virtual void analizeCollision(const GameObj& other) {};
 
 protected:
 	virtual void moveInside(sf::RectangleShape& border);
