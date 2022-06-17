@@ -74,9 +74,10 @@ void Level::addObj(int objNum, float xCord, float yCord)
 	pos = { xCord,yCord };
 	switch (objNum)
 	{
-	case Resources::Objects::Player:         setPlayerPos(); break;
-	case Resources::Objects::RegularBall:    addBall(pos, Resources::Objects(objNum)); break;
-	case Resources::Objects::BreakableTile:  addTile(pos, Resources::Objects(objNum)); break;
+	case Resources::Player:         setPlayerPos(); break;
+	case Resources::RegularBall:    addBall(pos, Resources::Objects(objNum)); break;
+	case Resources::BreakableTile:  addTile(pos, Resources::Objects(objNum)); break;
+	case Resources::ScoreGift:      addGift(pos, Resources::Objects(objNum)); break;
 	default:
 		break;
 	}
@@ -94,6 +95,12 @@ void Level::addTile(sf::Vector2f& pos, Resources::Objects tileType)
 	if (tileType == Resources::Objects::BreakableTile)
 		m_tiles.emplace_back(std::shared_ptr<BreakableTile>(new BreakableTile(TileColor::Blue, TileSize::Big, pos, Direction::Stay)));
 	//else
+}
+
+void Level::addGift(sf::Vector2f& pos, Resources::Objects giftType)
+{
+	if (giftType == Resources::ScoreGift)
+		m_gifts.emplace_back(std::shared_ptr<ScoreGift>(new ScoreGift(pos, Direction::Stay)));
 }
 
 void Level::setBackground(int levelIndex)
@@ -172,6 +179,9 @@ void Level::draw(sf::RenderWindow& window)
 	for (auto& b : m_balls) {
 		(*b).draw(window);
 	}
+	for (auto& g : m_gifts) {
+		(*g).draw(window);
+	}
 	for (auto& t : m_tiles) {
 		(*t).draw(window);
 	}
@@ -211,6 +221,9 @@ void Level::handleCollisions()
 	for (auto& s : m_player.getShots()) {
 		checkCollision(*s);
 	}
+	for (auto& g : m_gifts) {
+		checkCollision(*g);
+	}
 }
 
 void Level::handleBallsCollision()
@@ -223,6 +236,9 @@ void Level::handleBallsCollision()
 		if ((*b).isCollide())
 			(*b).fixCollision();
 	}
+	for (auto& b : m_balls) {
+		(*b).setQuartes(m_player);
+	}
 	for (auto& b : m_balls)
 		for (auto& s : m_player.getShots()) {
 			if ((*b).isCollide(*s)) {
@@ -234,10 +250,13 @@ void Level::handleBallsCollision()
 
 void Level::borderCollision()
 {
+	m_player.borderCollision(m_borders);
 	for (auto& b : m_balls) {
 		(*b).borderCollision(m_borders);
 	}
-	m_player.borderCollision(m_borders);
+	for (auto& g : m_gifts) {
+		(*g).borderCollision(m_borders);
+	}
 }
 
 void Level::checkCollision(GameObj& obj)
@@ -254,6 +273,12 @@ void Level::checkCollision(GameObj& obj)
 			break;
 		}
 	}
+	for (auto& g : m_gifts) {
+		if (obj.checkCollision(*g)) {
+			m_collisionHandler.processCollision(obj, *g);
+			break;
+		}
+	}
 	for (auto& s : m_player.getShots()) {
 		if (obj.checkCollision(*s)) {
 			m_collisionHandler.processCollision(obj, *s);
@@ -265,7 +290,7 @@ void Level::checkCollision(GameObj& obj)
 void Level::addItems()
 {
 	for (auto& ball : m_balls) {
-		if (ball->isDisposed() && ball->getBallSize() != BallSize::Small) {
+		if (ball->isDisposed() && ball->getBallSize() != BallSize::Tiny) {
 			ballShot(*ball);
 			break;
 		}
@@ -276,7 +301,7 @@ void Level::addScore()
 {
 	for (auto& ball : m_balls) {
 		if (ball->isDisposed()) {
-			m_player.addScore(ball->getBallSize());
+			m_player.addScore(m_player.ballSizeToScore(ball->getBallSize()));
 		}
 	}
 }
@@ -290,6 +315,10 @@ void Level::eraseDisposed()
 	std::erase_if(m_tiles, [](auto& tile)
 		{
 			return tile->isDisposed();
+		});
+	std::erase_if(m_gifts, [](auto& gift)
+		{
+			return gift->isDisposed();
 		});
 	std::erase_if(m_player.getShots(), [](auto& shot)
 		{
@@ -314,6 +343,9 @@ void Level::update()
 	for (auto& b : m_balls) {
 		(*b).update(delta);
 	}
+	for (auto& g : m_gifts) {
+		(*g).update(delta);
+	}
 	m_player.update(delta);
 	for (auto& t : m_tiles) {
 		(*t).update(delta);
@@ -325,6 +357,7 @@ void Level::resetLevel(Situation& situation)
 	m_balls.clear();
 	m_tiles.clear();
 	m_player.resetPlayer(situation);
+	m_gifts.clear();
 }
 
 void Level::ballShot(BaseBall& ball)

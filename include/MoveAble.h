@@ -12,11 +12,11 @@ public:
 	virtual void borderCollision(sf::RectangleShape& border);
 	//void direction(sf::Keyboard::Key key);
 	virtual void analizeCollision(const GameObj& other) {};
+	virtual void fixCollision(const GameObj& other) {};
 
 protected:
 	virtual void moveInside(sf::RectangleShape& border);
 	virtual void setDirection(Direction newDir);
-	virtual void fixCollision(const GameObj& other) {};
 	//virtual MixDirection getCollisionSide(const GameObj& other) {};
 public:
 

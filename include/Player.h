@@ -16,6 +16,7 @@ public:
 	virtual void draw(sf::RenderWindow& window)              override;
 	virtual void update(sf::Time delta);
 	virtual void borderCollision(sf::RectangleShape& border) override;
+	virtual const sf::FloatRect getHitBox() const override;
 
 	void         setPos(sf::Vector2f& pos);
 	void		 dirFromKey();
@@ -24,11 +25,13 @@ public:
 	void         removeLife();
 	bool         isLeftLives();
 	//void addLife();
-	void         addScore(BallSize size);
+	int          ballSizeToScore(BallSize size);
+	void         addScore(int score);
 	void         resetPlayer(Situation& situation);
 	void         updateLivesText();
 	void         updateScoreText();
 
+	void         activateGift(Resources::Objects giftType);
 	ShotsData&   getShots() { return m_shots; }
 
 private:

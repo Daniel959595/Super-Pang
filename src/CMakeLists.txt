@@ -16,6 +16,8 @@
                                               "RegularBall.cpp"
                                               "BaseShot.cpp"
                                               "RegularShot.cpp"
+                                              "BaseGift.cpp"
+                                              "ScoreGift.cpp"
                                               "Animation.cpp"
                                               "AnimationData.cpp"
                                               "Direction.cpp"

@@ -35,12 +35,16 @@
 #define BIG_BALL_SIZE    170
 #define MEDIUM_BALL_SIZE 140
 #define SMALL_BALL_SIZE  110
+#define TINY_BALL_SIZE    80
 
 
 #define BIG_TILE_SIZE    170
 #define MEDIUM_TILE_SIZE 140
 #define SMALL_TILE_SIZE  110
 #define TINY_TILE_SIZE   110
+
+#define GIFT_SIZE        15
+#define GIFT_SCORE       10
 
 enum class Situation
 {
@@ -80,10 +84,17 @@ enum class ButtonType {
 	EXIT,
 };
 
+enum class GiftType {
+	ScoreGift,
+	ShotsGift,
+	ExtraLifeGift,
+};
+
 enum class BallSize {
 	Big,
 	Medium,
 	Small,
+	Tiny,
 };
 
 enum class TileSize {

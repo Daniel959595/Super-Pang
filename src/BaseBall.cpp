@@ -32,9 +32,10 @@ float BaseBall::getDesireSize(BallSize size) const
 {
 	switch (size)
 	{
-	case BallSize::Big:    return BIG_BALL_SIZE; break;
+	case BallSize::Big:    return BIG_BALL_SIZE;    break;
 	case BallSize::Medium: return MEDIUM_BALL_SIZE; break;
-	case BallSize::Small:  return SMALL_BALL_SIZE; break;
+	case BallSize::Small:  return SMALL_BALL_SIZE;  break;
+	case BallSize::Tiny:   return TINY_BALL_SIZE;   break;
 	default:
 		break;
 	}
@@ -86,6 +87,7 @@ float BaseBall::maxVelocity(BallSize size)
 	case BallSize::Big:    return 31.f;
 	case BallSize::Medium: return 27.f;
 	case BallSize::Small:  return 23.f;
+	case BallSize::Tiny:   return 19.f;
 
 	default: return 0.f;
 	}
@@ -121,6 +123,7 @@ BallSize BaseBall::getSmallerSize()
 	{
 	case BallSize::Big:    return BallSize::Medium;
 	case BallSize::Medium: return BallSize::Small;
+	case BallSize::Small:  return BallSize::Tiny;
 	default:
 		return BallSize::Big;
 		break;
@@ -148,8 +151,8 @@ bool BaseBall::isCollide(const GameObj& other) const
 
 void BaseBall::analizeCollision(const GameObj& other)
 {
-	auto &thisRect  = this->getGlobalBounds();
-	auto &otherRect = other.getGlobalBounds();
+	/*auto &thisRect  = this->getGlobalBounds();
+	auto &otherRect = other.getHitBox();*/
 
 	setQuartesPos();
 	checkQuartes(other);
@@ -170,7 +173,7 @@ void BaseBall::setQuartesPos()
 void BaseBall::checkQuartes(const GameObj& other)
 {
 	auto thisRect  = this->getGlobalBounds();
-	auto otherRect = other.getGlobalBounds();
+	auto otherRect = other.getHitBox();
 
 	if (fstQurter.intersects(otherRect) && scdQurter.intersects(otherRect)) {      // top collisoin.
 		m_quarters[0] = 1; m_quarters[1] = 1;

@@ -29,9 +29,13 @@ private:
     void BreakableTileBall(GameObj& Tile,     GameObj& baseBall); 
     void shotBreakableTile(GameObj& shot,     GameObj& tile);
     void breakableTileShot(GameObj& tile,     GameObj& shot);
-
     void playerBall       (GameObj& player,   GameObj& ball);
     void ballPlayer       (GameObj& ball,     GameObj& player);
+
+    void playerGift       (GameObj& player,   GameObj& gift);
+    void giftPlayer       (GameObj& gift,     GameObj& player);
+    void giftTile         (GameObj& gift,     GameObj& tile);
+    void tileGift         (GameObj& tile,     GameObj& gift);
 
 private:
     Level& m_gameLevel;

@@ -19,9 +19,14 @@ bool GameObj::checkCollision(const GameObj& other)
 bool GameObj::isCollide(const GameObj& other) const
 {
 	auto thisRect = m_sprite.getGlobalBounds();
-	auto otherRect = other.getGlobalBounds();
+	auto otherRect = other.getHitBox();
 	if (thisRect.intersects(otherRect))
 		return true;
 	else
 		return false;
+}
+
+const sf::FloatRect GameObj::getHitBox() const
+{
+	return m_sprite.getGlobalBounds();
 }

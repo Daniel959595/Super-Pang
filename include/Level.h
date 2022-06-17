@@ -6,12 +6,14 @@
 #include "Player.h"
 #include "RegularBall.h"
 #include "BreakableTile.h"
+#include "ScoreGift.h"
 #include "CollisionHandling.h"
 
 #include <fstream>
 
 using BallsData = std::vector<std::shared_ptr<BaseBall>>;
 using TilesData = std::vector<std::shared_ptr<BaseTile>>;
+using GiftsData = std::vector<std::shared_ptr<BaseGift>>;
 
 class Level
 {
@@ -39,6 +41,7 @@ private:
 	void addObj               (int objNum, float xCord, float yCord);
 	void addBall			  (sf::Vector2f& pos, Resources::Objects ballType);
 	void addTile			  (sf::Vector2f& pos, Resources::Objects tileType);
+	void addGift			  (sf::Vector2f& pos, Resources::Objects giftType);
 	void setPlayerPos         ();
 	void setBorders           ();
 	
@@ -75,8 +78,6 @@ private:
 	Player m_player;
 	BallsData m_balls;
 	TilesData m_tiles;
-	
-	//std::vector<Gift> m_gifts;
+	GiftsData m_gifts;
 
-	//sf::Sprite m_backGround;
 };

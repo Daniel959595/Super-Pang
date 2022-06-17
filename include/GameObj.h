@@ -19,6 +19,8 @@ public:
 
 	virtual bool checkCollision(const GameObj& other) ;   // call to other.isCollide(). const
 	virtual bool isCollide(const GameObj& other) const;
+	virtual const sf::FloatRect getHitBox() const;
+
 
 	const sf::FloatRect& getGlobalBounds() const { return m_sprite.getGlobalBounds(); }
 

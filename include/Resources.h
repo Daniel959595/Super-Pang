@@ -17,6 +17,9 @@ public:
         RegularShot,
         BreakableTile,
         UnbreakableTile,
+        ScoreGift,
+        ShotsGift,
+        ExtraLifeGift,
         Max,
     };
 

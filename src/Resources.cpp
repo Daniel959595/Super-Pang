@@ -101,6 +101,28 @@ namespace
 
         return tile;
     }
+    AnimationData ScoreGiftData() {
+        auto gift = AnimationData{};
+
+        auto size = sf::Vector2i(66, 66);
+        const auto step = sf::Vector2i(72, 0);
+        const auto initSpace = sf::Vector2i(22, 69);
+
+        auto currentStart = initSpace;
+
+        auto nextStart = [&]()
+        {
+            currentStart += step;
+            return currentStart;
+        };
+
+        gift.m_data[Direction::Stay].emplace_back(currentStart, size);
+
+        for (int i = 0; i < 10; i++)
+            gift.m_data[Direction::Stay].emplace_back(nextStart(), size);
+
+        return gift;
+    }
 }
 
 
@@ -132,6 +154,7 @@ Resources::Resources()
     m_data[RegularBall]   = RegularBallData();
     m_data[RegularShot]   = RegularShotData();
     m_data[BreakableTile] = BreakableTileData();
+    m_data[ScoreGift]     = ScoreGiftData();
     //m_data[Backgrounds] = BackgroundsData();
 }
 
@@ -152,4 +175,8 @@ void Resources::loadTextures()
     if (!m_textures[BreakableTile].loadFromFile("Shot2.png"))
         throw std::runtime_error("Can't load file (Backgrounds.png).");
     m_textures[BreakableTile].setSmooth(true);
+
+    if (!m_textures[ScoreGift].loadFromFile("Coins.png"))
+        throw std::runtime_error("Can't load file (Coins.png).");
+    m_textures[ScoreGift].setSmooth(true);
 }

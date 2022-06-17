@@ -50,6 +50,18 @@ void Player::updateScoreText()
     m_scoreText.setString(std::string("score: " + std::to_string(m_score)));
 }
 
+void Player::activateGift(Resources::Objects giftType)
+{
+    switch (giftType)
+    {    
+    case Resources::ScoreGift: this->addScore(GIFT_SCORE); break;
+    case Resources::ShotsGift: break;
+    case Resources::ExtraLifeGift: m_lives += 1; break;
+    default: // exeption!!!
+        break;
+    }
+}
+
 void Player::setLivesIcon()
 {
     m_livesIcon = m_sprite;
@@ -123,6 +135,16 @@ void Player::borderCollision(sf::RectangleShape& border)
     moveInside(border);
 }
 
+const sf::FloatRect Player::getHitBox() const
+{
+    auto thisBounds = this->getGlobalBounds();
+    float x = thisBounds.left + (thisBounds.width / 5)*2;
+    float y = thisBounds.top + (thisBounds.height / 4);
+    
+    auto rect = sf::FloatRect(x, y, thisBounds.width / 5, thisBounds.height - (thisBounds.height / 4));
+    return rect;
+}
+
 void Player::shoot()
 {    
     //m_shots.emplace_back(std::unique_ptr<BaseShot>(new BaseShot(m_sprite.getPosition())));
@@ -153,19 +175,21 @@ bool Player::isLeftLives()
     return (m_lives >= 0 ? true : false);
 }
 
-void Player::addScore(BallSize size)
+int Player::ballSizeToScore(BallSize size)
 {
     switch (size)
     {
-    case BallSize::Big:    m_score += 1;
-        break;
-    case BallSize::Medium: m_score += 2;
-        break;
-    case BallSize::Small:  m_score += 4;
-        break;
+    case BallSize::Big:    return 1;
+    case BallSize::Medium: return 2;
+    case BallSize::Small:  return 4;
     default:
         break;
     }
+}
+
+void Player::addScore(int score)
+{
+    m_score += score;
     updateScoreText();
 }
 

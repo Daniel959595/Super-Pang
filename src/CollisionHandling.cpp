@@ -11,6 +11,8 @@
 #include "RegularBall.h"
 #include "RegularShot.h"
 #include "BreakableTile.h"
+#include "BaseGift.h"
+#include "ScoreGift.h"
 
 
 
@@ -28,12 +30,6 @@ void CollisionHandling::ballShot(GameObj& baseBall, GameObj& baseShot)
 {
     baseShot.setIsDisposed(true);
     baseBall.setIsDisposed(true);
-
-    /*BaseBall& ball = dynamic_cast<BaseBall&>(baseBall);
-
-    if (ball.getBallSize() != BallSize::Small)
-        m_gameLevel.ballShot(ball);*/
-
 }
 
 void CollisionHandling::shotBall(GameObj& baseshot, GameObj& baseBall)
@@ -72,13 +68,42 @@ void CollisionHandling::playerBall(GameObj& player, GameObj& ball)
     Player& gamePlayer = dynamic_cast<Player&>(player);
     BaseBall& gameBall = dynamic_cast<BaseBall&>(ball);
 
-    gamePlayer.removeLife();
-    gamePlayer.setIsDisposed(true);
+    if (gameBall.isCollide()) {
+        gamePlayer.removeLife();
+        gamePlayer.setIsDisposed(true);
+    }
 }
 
 void CollisionHandling::ballPlayer(GameObj& ball, GameObj& player)
 {
     playerBall(player, ball);
+}
+
+void CollisionHandling::playerGift(GameObj& player, GameObj& gift)
+{
+    Player& gamePlayer = dynamic_cast<Player&>(player);
+    BaseGift& gameGift = dynamic_cast<BaseGift&>(gift);
+
+    gamePlayer.activateGift(gameGift.getGiftType());
+
+    gameGift.setIsDisposed(true);
+}
+
+void CollisionHandling::giftPlayer(GameObj& gift, GameObj& player)
+{
+    playerGift(player, gift);
+}
+
+void CollisionHandling::giftTile(GameObj& gift, GameObj& tile)
+{
+    BaseGift& gameGift = dynamic_cast<BaseGift&>(gift);
+
+    gameGift.fixCollision(tile);
+}
+
+void CollisionHandling::tileGift(GameObj& tile, GameObj& gift)
+{
+    giftTile(gift, tile);
 }
 
 
@@ -101,12 +126,16 @@ CollisionHandling::HitMap CollisionHandling::initializeCollisionMap()
 
     phm[Key(typeid(RegularShot),   typeid(BreakableTile))] = &CollisionHandling::shotBreakableTile;
     phm[Key(typeid(BreakableTile), typeid(RegularShot))]   = &CollisionHandling::breakableTileShot;
-
-    /*
-    phm[Key(typeid(SpaceShip), typeid(SpaceShip))] = &shipShip;
-    phm[Key(typeid(Asteroid), typeid(SpaceShip))] = &asteroidShip;
-    phm[Key(typeid(SpaceStation), typeid(SpaceShip))] = &stationShip;
-    phm[Key(typeid(SpaceStation), typeid(Asteroid))] = &stationAsteroid;*/
+    
+    phm[Key(typeid(ScoreGift),     typeid(RegularShot))]   = &CollisionHandling::ignore;
+    phm[Key(typeid(RegularShot),   typeid(ScoreGift))]     = &CollisionHandling::ignore;
+    phm[Key(typeid(ScoreGift),     typeid(RegularBall))]   = &CollisionHandling::ignore;
+    phm[Key(typeid(RegularBall),   typeid(ScoreGift))]     = &CollisionHandling::ignore;
+    phm[Key(typeid(Player),        typeid(ScoreGift))]     = &CollisionHandling::playerGift;
+    phm[Key(typeid(ScoreGift),     typeid(Player))]        = &CollisionHandling::giftPlayer;
+    phm[Key(typeid(ScoreGift),     typeid(BreakableTile))] = &CollisionHandling::giftTile;
+    phm[Key(typeid(BreakableTile), typeid(ScoreGift))]     = &CollisionHandling::tileGift;
+    phm[Key(typeid(ScoreGift),     typeid(ScoreGift))]     = &CollisionHandling::ignore;
         
     return phm;
 }
