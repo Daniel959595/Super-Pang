@@ -30,3 +30,8 @@ const sf::FloatRect GameObj::getHitBox() const
 {
 	return m_sprite.getGlobalBounds();
 }
+
+void GameObj::activateSound(Sounds::Sound soundType)
+{
+	Sounds::instance().activateSound(soundType);
+}

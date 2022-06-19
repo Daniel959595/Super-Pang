@@ -14,6 +14,7 @@
                                               "Player.cpp"
                                               "BaseBall.cpp"
                                               "RegularBall.cpp"
+                                              "TriangleBall.cpp"
                                               "BaseShot.cpp"
                                               "RegularShot.cpp"
                                               "BaseGift.cpp"
@@ -23,5 +24,6 @@
                                               "Direction.cpp"
                                               "Utilities.cpp"
                                               "Resources.cpp"
+                                              "Sounds.cpp"
                                               "CollisionHandling.cpp"
                                               )

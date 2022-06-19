@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Level.h"
 #include "RegularBall.h"
+#include "TriangleBall.h"
 #include "RegularShot.h"
 #include "BreakableTile.h"
 #include "BaseGift.h"
@@ -30,6 +31,7 @@ void CollisionHandling::ballShot(GameObj& baseBall, GameObj& baseShot)
 {
     baseShot.setIsDisposed(true);
     baseBall.setIsDisposed(true);
+    baseBall.activateSound(Sounds::Sound::BallExplosion);
 }
 
 void CollisionHandling::shotBall(GameObj& baseshot, GameObj& baseBall)
@@ -56,6 +58,7 @@ void CollisionHandling::shotBreakableTile(GameObj& shot, GameObj& tile)
 {
     shot.setIsDisposed(true);
     tile.setIsDisposed(true);
+    tile.activateSound(Sounds::Sound::TileBreaking);
 }
 
 void CollisionHandling::breakableTileShot(GameObj& tile, GameObj& shot)
@@ -71,6 +74,7 @@ void CollisionHandling::playerBall(GameObj& player, GameObj& ball)
     if (gameBall.isCollide()) {
         gamePlayer.removeLife();
         gamePlayer.setIsDisposed(true);
+        gamePlayer.activateSound(Sounds::Sound::Faild);
     }
 }
 
@@ -116,6 +120,17 @@ CollisionHandling::HitMap CollisionHandling::initializeCollisionMap()
     phm[Key(typeid(RegularBall),   typeid(RegularBall))]   = &CollisionHandling::ignore;
     phm[Key(typeid(Player),        typeid(RegularBall))]   = &CollisionHandling::playerBall;  
     phm[Key(typeid(RegularBall),   typeid(Player))]        = &CollisionHandling::ballPlayer;  
+
+    phm[Key(typeid(TriangleBall),  typeid(RegularShot))]   = &CollisionHandling::ballShot;
+    phm[Key(typeid(RegularShot),   typeid(TriangleBall))]  = &CollisionHandling::shotBall;
+    phm[Key(typeid(TriangleBall),  typeid(TriangleBall))]  = &CollisionHandling::ignore;
+    phm[Key(typeid(Player),        typeid(TriangleBall))]  = &CollisionHandling::playerBall;
+    phm[Key(typeid(TriangleBall),  typeid(Player))]        = &CollisionHandling::ballPlayer;
+    phm[Key(typeid(ScoreGift),     typeid(TriangleBall))]  = &CollisionHandling::ignore;
+    phm[Key(typeid(TriangleBall),  typeid(ScoreGift))]     = &CollisionHandling::ignore;
+    phm[Key(typeid(TriangleBall),  typeid(BreakableTile))] = &CollisionHandling::ballBreakableTile;
+    phm[Key(typeid(BreakableTile), typeid(TriangleBall))]  = &CollisionHandling::BreakableTileBall;
+
     phm[Key(typeid(Player),        typeid(RegularShot))]   = &CollisionHandling::ignore;  
     phm[Key(typeid(RegularShot),   typeid(Player))]        = &CollisionHandling::ignore;  
 

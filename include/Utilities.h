@@ -1,9 +1,12 @@
 #pragma once
 
 #include "sfml/Graphics.hpp"
+#include <SFML/Audio.hpp>
 
 #include "Direction.h"
+#include "Direction.h"
 #include "Resources.h"
+#include "Sounds.h"
 
 #define NUM_LEVELS 2
 
@@ -35,7 +38,7 @@
 #define BIG_BALL_SIZE    170
 #define MEDIUM_BALL_SIZE 140
 #define SMALL_BALL_SIZE  110
-#define TINY_BALL_SIZE    80
+#define TINY_BALL_SIZE    60
 
 
 #define BIG_TILE_SIZE    170
@@ -45,6 +48,9 @@
 
 #define GIFT_SIZE        15
 #define GIFT_SCORE       10
+
+#define VOLUME           50
+#define NUM_MUSICS        3
 
 enum class Situation
 {

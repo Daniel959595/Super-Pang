@@ -9,7 +9,8 @@ public:
 	BaseBall(BallSize size, sf::Vector2f pos, Resources::Objects ballType, Direction dir, bool isNewBall);
 	virtual ~BaseBall() = 0 {};
 
-	virtual void update(sf::Time delta);
+	virtual void update(sf::Time delta) = 0;
+	virtual void borderCollision(sf::RectangleShape& border) override;
 
 	using pair = std::pair<std::shared_ptr<BaseBall>, std::shared_ptr<BaseBall>>;
 	virtual pair split() = 0;
@@ -20,14 +21,16 @@ public:
 	virtual bool isCollide(const GameObj& other) const override;
 	virtual void fixCollision();
 
+	//virtual void activateSound() override;
+
 protected:
 	sf::Vector2f getScaleFactors(BallSize size) const;
 	float getDesireSize(BallSize size) const;
 	sf::Color getRandColor() const;
-	void setVelocity(Direction dir, bool isNewBall);
+	virtual void setVelocity(Direction dir, bool isNewBall) {};
 
 	float maxVelocity(BallSize size);
-	virtual void moveInside(sf::RectangleShape& border);
+	virtual void moveInside(sf::RectangleShape& border) override;
 
 	virtual void analizeCollision(const GameObj& other) override;
 	//virtual bool getNewDirect(const GameObj& other);

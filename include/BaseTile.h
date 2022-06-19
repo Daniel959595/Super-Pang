@@ -10,6 +10,7 @@ public:
 	virtual ~BaseTile() = 0 {};
 
 	virtual void update(sf::Time delta) override = 0;
+	//virtual void activateSound() override;
 
 protected:
 	sf::Color getColor(TileColor color);

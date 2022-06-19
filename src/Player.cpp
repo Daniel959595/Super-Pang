@@ -2,7 +2,7 @@
 
 #include <optional>
 
-constexpr auto PlayerSpeed = 250.f;
+constexpr auto PlayerSpeed = 350.f;
 const auto AnimationTime = sf::seconds(0.1f);
 
 const auto TextSize = 50;
@@ -10,6 +10,7 @@ const auto BigSpace = 100.f;
 
 Player::Player()
     : MoveAble(Resources::Objects::Player, Direction::Stay, AnimationTime), m_font(Resources::instance().getFont())
+      , m_shotType(Resources::Objects::RegularShot)
 {
     setLivesIcon();
     setTexts();
@@ -85,8 +86,8 @@ void Player::dirFromKey()
     {
         { sf::Keyboard::Right, Direction::Right },
         { sf::Keyboard::Left,  Direction::Left  },
-        { sf::Keyboard::Up   , Direction::Up    },
-        { sf::Keyboard::Down , Direction::Down  },
+        { sf::Keyboard::Up   , Direction::Stay    },
+        { sf::Keyboard::Down , Direction::Stay  },
         { sf::Keyboard::Space, Direction::Stay  },
     };
 
@@ -99,7 +100,6 @@ void Player::dirFromKey()
         }
     }
     m_dir = Direction::Stay;
-    //m_faceRight = true;
     m_animation.direction(m_dir);
 }
 
@@ -107,10 +107,6 @@ void Player::direction(Direction dir)
 {
     m_dir = dir;
     m_animation.direction(dir);
- /*   if (dir == Direction::Left)
-        m_faceRight = false;
-    else
-        m_faceRight = true;*/
 }
 
 void Player::handleEvents(sf::Keyboard::Key key)
@@ -147,8 +143,24 @@ const sf::FloatRect Player::getHitBox() const
 
 void Player::shoot()
 {    
-    //m_shots.emplace_back(std::unique_ptr<BaseShot>(new BaseShot(m_sprite.getPosition())));
-    m_shots.emplace_back(std::shared_ptr<RegularShot>(new RegularShot(m_sprite.getPosition(), Resources::Objects::RegularShot)));
+    if (isCanShoot()) {
+        Sounds::instance().activateSound(Sounds::Sound::RegularShot);
+        m_shots.emplace_back(std::shared_ptr<RegularShot>
+            (new RegularShot(m_sprite.getPosition(), Resources::Objects::RegularShot)));
+    }
+}
+
+bool Player::isCanShoot()
+{
+    switch (m_shotType)
+    {
+    
+    case Resources::RegularShot: return (m_shots.size() > 0 ? false : true);
+        break;
+    default:
+        true;
+        break;
+    }
 }
 
 void Player::draw(sf::RenderWindow& window)
@@ -173,6 +185,11 @@ void Player::removeLife()
 bool Player::isLeftLives()
 {
     return (m_lives >= 0 ? true : false);
+}
+
+void Player::changeShotType(Resources::Objects shotType)
+{
+    m_shotType = shotType;
 }
 
 int Player::ballSizeToScore(BallSize size)

@@ -11,6 +11,11 @@ BaseTile::BaseTile(TileColor color, TileSize size, sf::Vector2f pos, Resources::
 	m_sprite.setColor(getColor(color));
 }
 
+//void BaseTile::activateSound()
+//{
+//	Sounds::instance().activateSound(Sounds::Sound::TileBreaking);
+//}
+
 sf::Color BaseTile::getColor(TileColor color)
 {
 	static std::vector<sf::Color> m_colors = { sf::Color(200,0,0),

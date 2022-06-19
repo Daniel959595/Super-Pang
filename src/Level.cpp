@@ -8,11 +8,12 @@ const auto TextSize = 50;
 
 Level::Level() 
 	: m_texture(Resources::instance().texture(Resources::Objects::Backgrounds)), m_collisionHandler(*this),
-	  m_font(Resources::instance().getFont())
+	  m_font(Resources::instance().getFont()), m_music(NUM_MUSICS)
 {
 	m_sprite.setTexture(m_texture);
 	setText();
 	setBackgroundRects();
+	setMusic();
 	setBorders();
 }
 
@@ -76,6 +77,7 @@ void Level::addObj(int objNum, float xCord, float yCord)
 	{
 	case Resources::Player:         setPlayerPos(); break;
 	case Resources::RegularBall:    addBall(pos, Resources::Objects(objNum)); break;
+	case Resources::TriangleBall:   addBall(pos, Resources::Objects(objNum)); break;
 	case Resources::BreakableTile:  addTile(pos, Resources::Objects(objNum)); break;
 	case Resources::ScoreGift:      addGift(pos, Resources::Objects(objNum)); break;
 	default:
@@ -87,7 +89,8 @@ void Level::addBall(sf::Vector2f& pos, Resources::Objects ballType)
 {
 	if (ballType == Resources::Objects::RegularBall)
 		m_balls.emplace_back(std::shared_ptr<RegularBall>(new RegularBall(BallSize::Big, pos, Direction::Left, false)));
-	//else
+	else if (ballType == Resources::Objects::TriangleBall)
+		m_balls.emplace_back(std::shared_ptr<TriangleBall>(new TriangleBall(BallSize::Big, pos, Direction::Left, false)));
 }
 
 void Level::addTile(sf::Vector2f& pos, Resources::Objects tileType)
@@ -129,6 +132,26 @@ void Level::setTextPos()
 	m_text.setPosition(sf::Vector2f(x, y));
 }
 
+void Level::setMusic()
+{
+	int i = 0;
+	m_music[i++].openFromFile("LevelMusic1.wav");
+	m_music[i++].openFromFile("LevelMusic2.wav");
+	m_music[i++].openFromFile("LevelMusic3.wav");
+}
+
+void Level::handleMusic(bool toPlay)
+{
+	if (toPlay) {
+		m_music[m_levelIndex % m_music.size()];
+		m_music[m_levelIndex % m_music.size()].setLoop(true);
+		m_music[m_levelIndex % m_music.size()].setVolume(50);
+		m_music[m_levelIndex % m_music.size()].play();
+	}
+	else
+		m_music[m_levelIndex % m_music.size()].stop();
+}
+
 void Level::updateText()
 {
 	m_text.setString("Level No." + std::to_string(m_levelIndex));
@@ -153,6 +176,7 @@ void Level::setBorders()
 
 void Level::runLevel(sf::RenderWindow& window, Situation& situation)
 {
+	handleMusic(true);
 	while (window.isOpen()) {
 		draw(window);
 		handleEvents(window, situation);
@@ -354,6 +378,7 @@ void Level::update()
 
 void Level::resetLevel(Situation& situation)
 {
+	handleMusic(false);
 	m_balls.clear();
 	m_tiles.clear();
 	m_player.resetPlayer(situation);

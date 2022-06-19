@@ -2,7 +2,6 @@
 
 MoveAble::MoveAble(Resources::Objects object, Direction dir, sf::Time animationTime)
 	: GameObj(object, dir, animationTime), m_dir(dir)
-	//: m_animation(Resources::instance().animationData(object), object, dir, m_sprite, animationTime), m_dir(dir)
 {
 }
 

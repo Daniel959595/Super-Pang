@@ -5,11 +5,14 @@
 Menu::Menu()
 {
     setTextureAndSprite();
+    setMusic();
 }
 
 void Menu::handleMenu(sf::RenderWindow& window, sf::View& view)
 {
 	while (window.isOpen() && ! m_exit) {
+        if (m_music.getStatus() != sf::Music::Playing)
+            m_music.play();
 		draw(window);
 		handleEvents(window, view);
 	}
@@ -29,6 +32,13 @@ void Menu::setTextureAndSprite()
     float factorX = WINDOW_WIDTH  / m_backGround.getGlobalBounds().width;
     float factorY = WINDOW_HEIGHT / m_backGround.getGlobalBounds().height;
     m_backGround.scale(sf::Vector2f(factorX, factorY));
+}
+
+void Menu::setMusic()
+{
+    m_music.openFromFile("MenuSound.wav");
+    m_music.setLoop(true);
+    m_music.setVolume(50);
 }
 
 void Menu::draw(sf::RenderWindow& window)
@@ -72,8 +82,10 @@ void Menu::resizeView(sf::RenderWindow& window, sf::View& view, sf::Event& event
 void Menu::handleClick(sf::Vector2f& clickLocation)
 {
     for (auto& b : m_buttons) {
-        if ((b)->handleClick(clickLocation))
+        if ((b)->handleClick(clickLocation)) {
+            m_music.stop();
             (b)->runAction();
+        }
     }
 }
 

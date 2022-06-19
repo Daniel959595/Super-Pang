@@ -5,6 +5,7 @@
 #include "Utilities.h"
 #include "Player.h"
 #include "RegularBall.h"
+#include "TriangleBall.h"
 #include "BreakableTile.h"
 #include "ScoreGift.h"
 #include "CollisionHandling.h"
@@ -32,6 +33,8 @@ private:
 	void setBackground        (int levelIndex);
 	void setText              ();
 	void setTextPos           ();
+	void setMusic             ();
+	void handleMusic          (bool toPlay);
 	void updateText           ();
 	//void loadBalls            ();
 	void loadFromfile         ();
@@ -68,6 +71,8 @@ private:
 	sf::RectangleShape m_borders;                       // represent the edges of the play ground.
 
 	sf::Clock m_clock = sf::Clock();
+
+	std::vector<sf::Music> m_music;
 
 	int m_levelIndex;
 	sf::Text m_text;

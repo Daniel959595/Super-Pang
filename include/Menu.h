@@ -17,6 +17,7 @@ public:
 
 private:
 	void setTextureAndSprite();
+	void setMusic();
 	void draw(sf::RenderWindow& window);
 	void handleEvents(sf::RenderWindow& window, sf::View& view);
 	void resizeView(sf::RenderWindow& window, sf::View& view, sf::Event& event);
@@ -29,6 +30,8 @@ public:
 private:
 	sf::Texture m_texture;
 	sf::Sprite m_backGround;
+
+	sf::Music m_music;
 
 	//std::vector<std::unique_ptr<BaseButton*>> m_buttons;
 	std::vector<std::unique_ptr<BaseButton>> m_buttons;

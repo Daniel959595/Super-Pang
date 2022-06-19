@@ -23,7 +23,7 @@ void BaseShot::update(sf::Time deltaTime)
 	if (m_elapsed >= AnimationTime)
 	{
 		m_elapsed -= AnimationTime;
-		m_sprite.move(sf::Vector2f(0, float(- 2 * (TABLE_HEIGHT / 191.f))));
+		m_sprite.move(sf::Vector2f(0, float(- 4 * (TABLE_HEIGHT / 191.f))));
 	}
 }
 

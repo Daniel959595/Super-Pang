@@ -23,4 +23,6 @@ public:
 protected:
 	sf::Time m_elapsed = {};
 
+	//sf::Sound m_sound;
+
 };

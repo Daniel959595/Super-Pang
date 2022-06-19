@@ -25,11 +25,13 @@ public:
 	void         removeLife();
 	bool         isLeftLives();
 	//void addLife();
+	void         changeShotType(Resources::Objects shotType);
 	int          ballSizeToScore(BallSize size);
 	void         addScore(int score);
 	void         resetPlayer(Situation& situation);
 	void         updateLivesText();
 	void         updateScoreText();
+
 
 	void         activateGift(Resources::Objects giftType);
 	ShotsData&   getShots() { return m_shots; }
@@ -39,6 +41,7 @@ private:
 	void		 setTextsPos();
 	void         setLivesIcon();
 	void		 shoot(); 
+	bool		 isCanShoot();
 	void		 updateShots(sf::Time delta);
 	void         handleSituation(Situation& situation);
 
@@ -54,4 +57,6 @@ private:
 
 	ShotType  m_shot = ShotType::Normal;
 	ShotsData m_shots;
+
+	Resources::Objects m_shotType;
 };

@@ -13,8 +13,10 @@ public:
     {
         Player,
         RegularBall,
+        TriangleBall,
         Backgrounds,
         RegularShot,
+        DoubleShot, // same as regular. 
         BreakableTile,
         UnbreakableTile,
         ScoreGift,

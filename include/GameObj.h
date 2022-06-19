@@ -27,13 +27,17 @@ public:
 	virtual void setIsDisposed(bool status) { m_isDisposed = status; }
 	bool isDisposed() { return m_isDisposed; }
 
+	virtual void activateSound(Sounds::Sound soundType); 
+
 protected:
 
 public:
 
 protected:
 	sf::Sprite m_sprite;
-
 	Animation m_animation;
+
+	//sf::Sound m_sound;
+
 	bool m_isDisposed = false;
 };

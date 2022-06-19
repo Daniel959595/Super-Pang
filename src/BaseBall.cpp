@@ -16,13 +16,15 @@ BaseBall::BaseBall(BallSize size, sf::Vector2f pos, Resources::Objects ballType,
 	m_sprite.setPosition(pos);
 	m_sprite.setScale(getScaleFactors(size));
 	m_sprite.setColor(getRandColor());
-	setVelocity(dir, isNewBall);
+	//setVelocity(dir, isNewBall);
 }
 
 sf::Vector2f BaseBall::getScaleFactors(BallSize size) const
 {
-	float width = float((m_sprite.getTexture()->getSize().x));
-	float height = float((m_sprite.getTexture()->getSize().y));
+	/*float width = float((m_sprite.getTexture()->getSize().x));
+	float height = float((m_sprite.getTexture()->getSize().y));*/
+	float width  = m_sprite.getGlobalBounds().width;
+	float height = m_sprite.getGlobalBounds().height;
 	float factorX = getDesireSize(size) / width;
 	float factorY = getDesireSize(size) / height;
 	return sf::Vector2f(factorX, factorY);
@@ -52,33 +54,33 @@ sf::Color BaseBall::getRandColor() const
 	return m_colors[rand() % m_colors.size()];
 }
 
-void BaseBall::setVelocity(Direction dir, bool isNewBall)
-{
-	float y = (isNewBall ? -20.f : 0.f);
-	switch (dir)
-	{
-	case Direction::Right: m_velocity = sf::Vector2f(3.5f, y);  break;
-	case Direction::Left:  m_velocity = sf::Vector2f(-3.5f, y); break;	
-	default:
-		break;
-	}
-}
+//void BaseBall::setVelocity(Direction dir, bool isNewBall)
+//{
+//	float y = (isNewBall ? -20.f : 0.f);
+//	switch (dir)
+//	{
+//	case Direction::Right: m_velocity = sf::Vector2f(3.5f, y);  break;
+//	case Direction::Left:  m_velocity = sf::Vector2f(-3.5f, y); break;	
+//	default:
+//		break;
+//	}
+//}
 
-void BaseBall::update(sf::Time delta)
-{
-	float dt = delta.asSeconds();
-	m_toatalTime += dt;
-	if (m_toatalTime >= m_moveTime) {
-		m_toatalTime = 0;
-		//m_velocity.y += m_gravity * dt;
-		m_velocity.y += m_gravity;
-		if (m_velocity.y > maxVelocity(m_ballSize))
-			m_velocity.y = maxVelocity(m_ballSize);
-		//m_sprite.move(m_velocity * dt * BallSpeed);
-		m_sprite.move(m_velocity);
-	}
-	
-}
+//void BaseBall::update(sf::Time delta)
+//{
+//	float dt = delta.asSeconds();
+//	m_toatalTime += dt;
+//	if (m_toatalTime >= m_moveTime) {
+//		m_toatalTime = 0;
+//		//m_velocity.y += m_gravity * dt;
+//		m_velocity.y += m_gravity;
+//		if (m_velocity.y > maxVelocity(m_ballSize))
+//			m_velocity.y = maxVelocity(m_ballSize);
+//		//m_sprite.move(m_velocity * dt * BallSpeed);
+//		m_sprite.move(m_velocity);
+//	}
+//	
+//}
 
 float BaseBall::maxVelocity(BallSize size)
 {
@@ -93,6 +95,11 @@ float BaseBall::maxVelocity(BallSize size)
 	}
 }
 
+void BaseBall::borderCollision(sf::RectangleShape& border)
+{
+	moveInside(border);
+}
+
 void BaseBall::moveInside(sf::RectangleShape& border)
 {
 	sf::FloatRect bordBounds = border.getGlobalBounds();
@@ -104,11 +111,11 @@ void BaseBall::moveInside(sf::RectangleShape& border)
 	else if (thisBounds.top < bordBounds.top)                                          // top collision.
 		m_velocity.y *= -1;
 	else if (thisBounds.top + thisBounds.height > bordBounds.top + bordBounds.height) {  // down collision.
-		//m_velocity.y += m_gravity; // need to be fixed. 
 		m_velocity.y *= -1;
 	}
+	else
+		return;
 
-	
 	MoveAble::moveInside(border);
 }
 
@@ -267,6 +274,11 @@ void BaseBall::fixCollision()
 	for (int i = 0; i < 4; i++) // func!!! resetQuarters()/
 		m_quarters[i] = 0;
 }
+
+//void BaseBall::activateSound()
+//{
+//	Sounds::instance().activateSound(Sounds::Sound::BallExplosion);
+//}
 
 MixDirection BaseBall::getNewDirect()
 {
