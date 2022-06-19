@@ -43,6 +43,7 @@ private:
 	void		 shoot(); 
 	bool		 isCanShoot();
 	void		 updateShots(sf::Time delta);
+	void         resetShotType();
 	void         handleSituation(Situation& situation);
 
 private:

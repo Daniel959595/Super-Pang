@@ -53,6 +53,7 @@
 
 #define VOLUME           50
 #define NUM_MUSICS        3
+#define NUM_GIFTS         3
 
 enum class Situation
 {

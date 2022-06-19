@@ -234,6 +234,7 @@ void Player::handleSituation(Situation& situation)
         m_score = 0;
 
     case Situation::LevelFailed:
+        resetShotType();
     case Situation::LevelSucced:
         m_shots.clear(); break;
 
@@ -263,6 +264,11 @@ void Player::updateShots(sf::Time delta)
     for (auto& s : m_shots) {
         (*s).update(delta);
     }
+}
+
+void Player::resetShotType()
+{
+    m_shotType = Resources::Objects::RegularShot;
 }
 
 

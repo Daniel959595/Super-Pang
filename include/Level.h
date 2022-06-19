@@ -46,7 +46,9 @@ private:
 	void addObj               (int objNum, float xCord, float yCord);
 	void addBall			  (sf::Vector2f& pos, Resources::Objects ballType);
 	void addTile			  (sf::Vector2f& pos, Resources::Objects tileType);
-	void addGift			  (sf::Vector2f& pos, Resources::Objects giftType);
+	void addGift			  (sf::Vector2f& pos);
+	bool isDeserveGift        ();
+	int  getRandGift          ();
 	void setPlayerPos         ();
 	void setBorders           ();
 	

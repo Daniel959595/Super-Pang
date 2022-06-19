@@ -10,6 +10,7 @@ Level::Level()
 	: m_texture(Resources::instance().texture(Resources::Objects::Backgrounds)), m_collisionHandler(*this),
 	  m_font(Resources::instance().getFont()), m_music(NUM_MUSICS)
 {
+	srand(time(NULL));
 	m_sprite.setTexture(m_texture);
 	setText();
 	setBackgroundRects();
@@ -79,9 +80,9 @@ void Level::addObj(int objNum, float xCord, float yCord)
 	case Resources::RegularBall:    
 	case Resources::TriangleBall:   addBall(pos, Resources::Objects(objNum)); break;
 	case Resources::BreakableTile:  addTile(pos, Resources::Objects(objNum)); break;
-	case Resources::ScoreGift:      
+	/*case Resources::ScoreGift:      
 	case Resources::ShotGift:       
-	case Resources::LifeGift:       addGift(pos, Resources::Objects(objNum)); break;
+	case Resources::LifeGift:       addGift(pos); break;*/
 	default:
 		break;
 	}
@@ -107,8 +108,9 @@ void Level::addTile(sf::Vector2f& pos, Resources::Objects tileType)
 	//else
 }
 
-void Level::addGift(sf::Vector2f& pos, Resources::Objects giftType)
+void Level::addGift(sf::Vector2f& pos)
 {
+	Resources::Objects giftType = Resources::Objects(getRandGift());
 	switch (giftType)
 	{
 	case Resources::ScoreGift: m_gifts.emplace_back(std::shared_ptr<ScoreGift>
@@ -122,9 +124,19 @@ void Level::addGift(sf::Vector2f& pos, Resources::Objects giftType)
 	}
 }
 
+bool Level::isDeserveGift()
+{
+	return (rand() % 4 == 0);
+}
+
+int Level::getRandGift()
+{
+	return (rand() % NUM_GIFTS) + (int)Resources::Objects::ScoreGift ;
+}
+
 void Level::setBackground(int levelIndex)
 {
-	m_sprite.setTextureRect(m_backgroundsRects[levelIndex - 1]);//-1
+	m_sprite.setTextureRect(m_backgroundsRects[levelIndex - (int)1]);
 	if (m_sprite.getScale() == sf::Vector2f(1, 1)) {
 		float factorX = WINDOW_WIDTH / m_sprite.getGlobalBounds().width;
 		float factorY = BACBGROUND_HEIGHT / m_sprite.getGlobalBounds().height;
@@ -333,6 +345,13 @@ void Level::addItems()
 		if (ball->isDisposed() && ball->getBallSize() != BallSize::Tiny) {
 			ballShot(*ball);
 			break;
+		}
+	}
+	for (auto& tile : m_tiles) {
+		if (tile->isDisposed() && isDeserveGift()) {
+			auto bounds = tile->getGlobalBounds();
+			sf::Vector2f pos = { bounds.left + bounds.width/2, bounds.top };
+			addGift(pos);
 		}
 	}
 }
