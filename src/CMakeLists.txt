@@ -19,6 +19,8 @@
                                               "RegularShot.cpp"
                                               "BaseGift.cpp"
                                               "ScoreGift.cpp"
+                                              "ShotGift.cpp"
+                                              "LifeGift.cpp"
                                               "Animation.cpp"
                                               "AnimationData.cpp"
                                               "Direction.cpp"

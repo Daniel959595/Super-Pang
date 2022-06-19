@@ -76,10 +76,12 @@ void Level::addObj(int objNum, float xCord, float yCord)
 	switch (objNum)
 	{
 	case Resources::Player:         setPlayerPos(); break;
-	case Resources::RegularBall:    addBall(pos, Resources::Objects(objNum)); break;
+	case Resources::RegularBall:    
 	case Resources::TriangleBall:   addBall(pos, Resources::Objects(objNum)); break;
 	case Resources::BreakableTile:  addTile(pos, Resources::Objects(objNum)); break;
-	case Resources::ScoreGift:      addGift(pos, Resources::Objects(objNum)); break;
+	case Resources::ScoreGift:      
+	case Resources::ShotGift:       
+	case Resources::LifeGift:       addGift(pos, Resources::Objects(objNum)); break;
 	default:
 		break;
 	}
@@ -87,10 +89,15 @@ void Level::addObj(int objNum, float xCord, float yCord)
 
 void Level::addBall(sf::Vector2f& pos, Resources::Objects ballType)
 {
-	if (ballType == Resources::Objects::RegularBall)
-		m_balls.emplace_back(std::shared_ptr<RegularBall>(new RegularBall(BallSize::Big, pos, Direction::Left, false)));
-	else if (ballType == Resources::Objects::TriangleBall)
-		m_balls.emplace_back(std::shared_ptr<TriangleBall>(new TriangleBall(BallSize::Big, pos, Direction::Left, false)));
+	switch (ballType)
+	{
+	case Resources::Objects::RegularBall: m_balls.emplace_back(std::shared_ptr<RegularBall>
+		(new RegularBall(BallSize::Big, pos, Direction::Left, false))); break;
+	case Resources::Objects::TriangleBall: m_balls.emplace_back(std::shared_ptr<TriangleBall>
+		(new TriangleBall(BallSize::Big, pos, Direction::Left, false))); break;
+	default:
+		break;
+	}
 }
 
 void Level::addTile(sf::Vector2f& pos, Resources::Objects tileType)
@@ -102,8 +109,17 @@ void Level::addTile(sf::Vector2f& pos, Resources::Objects tileType)
 
 void Level::addGift(sf::Vector2f& pos, Resources::Objects giftType)
 {
-	if (giftType == Resources::ScoreGift)
-		m_gifts.emplace_back(std::shared_ptr<ScoreGift>(new ScoreGift(pos, Direction::Stay)));
+	switch (giftType)
+	{
+	case Resources::ScoreGift: m_gifts.emplace_back(std::shared_ptr<ScoreGift>
+		(new ScoreGift(pos, Direction::Stay))); break;
+	case Resources::ShotGift: m_gifts.emplace_back(std::shared_ptr<ShotGift>
+		(new ShotGift(pos, Direction::Stay))); break;
+	case Resources::LifeGift: m_gifts.emplace_back(std::shared_ptr<LifeGift>
+		(new LifeGift(pos, Direction::Stay))); break;
+	default:
+		break;
+	}
 }
 
 void Level::setBackground(int levelIndex)

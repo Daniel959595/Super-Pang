@@ -14,6 +14,9 @@
 #include "BreakableTile.h"
 #include "BaseGift.h"
 #include "ScoreGift.h"
+#include "ShotGift.h"
+#include "LifeGift.h"
+//#include "Gift.h"
 
 
 
@@ -144,6 +147,8 @@ CollisionHandling::HitMap CollisionHandling::initializeCollisionMap()
     
     phm[Key(typeid(ScoreGift),     typeid(RegularShot))]   = &CollisionHandling::ignore;
     phm[Key(typeid(RegularShot),   typeid(ScoreGift))]     = &CollisionHandling::ignore;
+    phm[Key(typeid(ScoreGift),     typeid(TriangleBall))]  = &CollisionHandling::ignore;
+    phm[Key(typeid(TriangleBall),  typeid(ScoreGift))]     = &CollisionHandling::ignore;
     phm[Key(typeid(ScoreGift),     typeid(RegularBall))]   = &CollisionHandling::ignore;
     phm[Key(typeid(RegularBall),   typeid(ScoreGift))]     = &CollisionHandling::ignore;
     phm[Key(typeid(Player),        typeid(ScoreGift))]     = &CollisionHandling::playerGift;
@@ -151,6 +156,38 @@ CollisionHandling::HitMap CollisionHandling::initializeCollisionMap()
     phm[Key(typeid(ScoreGift),     typeid(BreakableTile))] = &CollisionHandling::giftTile;
     phm[Key(typeid(BreakableTile), typeid(ScoreGift))]     = &CollisionHandling::tileGift;
     phm[Key(typeid(ScoreGift),     typeid(ScoreGift))]     = &CollisionHandling::ignore;
+
+    phm[Key(typeid(LifeGift),      typeid(RegularShot))]   = &CollisionHandling::ignore;
+    phm[Key(typeid(RegularShot),   typeid(LifeGift))]      = &CollisionHandling::ignore;
+    phm[Key(typeid(LifeGift),      typeid(TriangleBall))]  = &CollisionHandling::ignore;
+    phm[Key(typeid(TriangleBall),  typeid(LifeGift))]      = &CollisionHandling::ignore;
+    phm[Key(typeid(LifeGift),      typeid(RegularBall))]   = &CollisionHandling::ignore;
+    phm[Key(typeid(RegularBall),   typeid(LifeGift))]      = &CollisionHandling::ignore;
+    phm[Key(typeid(Player),        typeid(LifeGift))]      = &CollisionHandling::playerGift;
+    phm[Key(typeid(LifeGift),      typeid(Player))]        = &CollisionHandling::giftPlayer;
+    phm[Key(typeid(LifeGift),      typeid(BreakableTile))] = &CollisionHandling::giftTile;
+    phm[Key(typeid(BreakableTile), typeid(LifeGift))]      = &CollisionHandling::tileGift;
+    phm[Key(typeid(LifeGift),      typeid(LifeGift))]      = &CollisionHandling::ignore;
+    phm[Key(typeid(LifeGift),      typeid(ScoreGift))]     = &CollisionHandling::ignore;
+    phm[Key(typeid(ScoreGift),     typeid(LifeGift))]      = &CollisionHandling::ignore;
+
+    phm[Key(typeid(ShotGift),      typeid(RegularShot))]   = &CollisionHandling::ignore;
+    phm[Key(typeid(RegularShot),   typeid(ShotGift))]      = &CollisionHandling::ignore;
+    phm[Key(typeid(ShotGift),      typeid(TriangleBall))]  = &CollisionHandling::ignore;
+    phm[Key(typeid(TriangleBall),  typeid(ShotGift))]      = &CollisionHandling::ignore;
+    phm[Key(typeid(ShotGift),      typeid(RegularBall))]   = &CollisionHandling::ignore;
+    phm[Key(typeid(RegularBall),   typeid(ShotGift))]      = &CollisionHandling::ignore;
+    phm[Key(typeid(Player),        typeid(ShotGift))]      = &CollisionHandling::playerGift;
+    phm[Key(typeid(ShotGift),      typeid(Player))]        = &CollisionHandling::giftPlayer;
+    phm[Key(typeid(ShotGift),      typeid(BreakableTile))] = &CollisionHandling::giftTile;
+    phm[Key(typeid(BreakableTile), typeid(ShotGift))]      = &CollisionHandling::tileGift;
+    phm[Key(typeid(ShotGift),      typeid(ShotGift))]      = &CollisionHandling::ignore;
+    phm[Key(typeid(ShotGift),      typeid(ScoreGift))]     = &CollisionHandling::ignore;
+    phm[Key(typeid(ScoreGift),     typeid(ShotGift))]      = &CollisionHandling::ignore;
+    phm[Key(typeid(ShotGift),      typeid(ShotGift))]      = &CollisionHandling::ignore;
+    phm[Key(typeid(LifeGift),      typeid(ShotGift))]      = &CollisionHandling::ignore;
+    phm[Key(typeid(ShotGift),      typeid(LifeGift))]      = &CollisionHandling::ignore;
+
         
     return phm;
 }

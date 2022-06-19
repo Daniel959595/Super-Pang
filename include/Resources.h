@@ -20,8 +20,8 @@ public:
         BreakableTile,
         UnbreakableTile,
         ScoreGift,
-        ShotsGift,
-        ExtraLifeGift,
+        ShotGift,
+        LifeGift,
         Max,
     };
 

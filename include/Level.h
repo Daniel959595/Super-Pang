@@ -8,6 +8,8 @@
 #include "TriangleBall.h"
 #include "BreakableTile.h"
 #include "ScoreGift.h"
+#include "ShotGift.h"
+#include "LifeGift.h"
 #include "CollisionHandling.h"
 
 #include <fstream>

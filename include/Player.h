@@ -24,10 +24,10 @@ public:
 	void		 handleEvents(sf::Keyboard::Key key);
 	void         removeLife();
 	bool         isLeftLives();
-	//void addLife();
 	void         changeShotType(Resources::Objects shotType);
 	int          ballSizeToScore(BallSize size);
 	void         addScore(int score);
+	void		 addLife();
 	void         resetPlayer(Situation& situation);
 	void         updateLivesText();
 	void         updateScoreText();

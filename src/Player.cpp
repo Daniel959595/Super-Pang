@@ -56,8 +56,8 @@ void Player::activateGift(Resources::Objects giftType)
     switch (giftType)
     {    
     case Resources::ScoreGift: this->addScore(GIFT_SCORE); break;
-    case Resources::ShotsGift: break;
-    case Resources::ExtraLifeGift: m_lives += 1; break;
+    case Resources::LifeGift: addLife();  break;
+    case Resources::ShotGift: m_shotType = Resources::Objects::DoubleShot; break;
     default: // exeption!!!
         break;
     }
@@ -154,8 +154,8 @@ bool Player::isCanShoot()
 {
     switch (m_shotType)
     {
-    
     case Resources::RegularShot: return (m_shots.size() > 0 ? false : true);
+    case Resources::DoubleShot: return (m_shots.size() > 1 ? false : true);
         break;
     default:
         true;
@@ -208,6 +208,12 @@ void Player::addScore(int score)
 {
     m_score += score;
     updateScoreText();
+}
+
+void Player::addLife()
+{
+    m_lives++;
+    updateLivesText();
 }
 
 void Player::resetPlayer(Situation& situation)

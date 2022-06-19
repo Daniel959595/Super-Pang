@@ -147,6 +147,30 @@ namespace
 
         return gift;
     }
+    AnimationData LifeGiftData() {
+        auto gift = AnimationData{};
+
+        auto size = sf::Vector2i(20, 20);
+        const auto initSpace = sf::Vector2i(160, 0);
+
+        auto currentStart = initSpace;
+
+        gift.m_data[Direction::Stay].emplace_back(currentStart, size);
+
+        return gift;
+    }
+    AnimationData ShotGiftData() {
+        auto gift = AnimationData{};
+
+        auto size = sf::Vector2i(20, 20);
+        const auto initSpace = sf::Vector2i(0, 0);
+
+        auto currentStart = initSpace;
+
+        gift.m_data[Direction::Stay].emplace_back(currentStart, size);
+
+        return gift;
+    }
 }
 
 
@@ -180,6 +204,8 @@ Resources::Resources()
     m_data[RegularShot]   = RegularShotData();
     m_data[BreakableTile] = BreakableTileData();
     m_data[ScoreGift]     = ScoreGiftData();
+    m_data[LifeGift]      = LifeGiftData();
+    m_data[ShotGift]      = ShotGiftData();
     //m_data[Backgrounds] = BackgroundsData();
 }
 
@@ -209,4 +235,12 @@ void Resources::loadTextures()
     if (!m_textures[ScoreGift].loadFromFile("Coins.png"))
         throw std::runtime_error("Can't load file (Coins.png).");
     m_textures[ScoreGift].setSmooth(true);
+
+    if (!m_textures[LifeGift].loadFromFile("Gifts.png"))
+        throw std::runtime_error("Can't load file (Coins.png).");
+    m_textures[LifeGift].setSmooth(true);
+
+    if (!m_textures[ShotGift].loadFromFile("Gifts.png"))
+        throw std::runtime_error("Can't load file (Coins.png).");
+    m_textures[ShotGift].setSmooth(true);
 }

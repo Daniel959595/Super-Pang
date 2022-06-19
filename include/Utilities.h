@@ -24,7 +24,7 @@
 #define TABLE_WIDTH 1370
 #define TABLE_HEIGHT 830
 
-
+// in the png file!!! 
 #define PLAYER_WIDTH  32
 #define PLAYER_HIEGHT 32
 
@@ -46,7 +46,9 @@
 #define SMALL_TILE_SIZE  110
 #define TINY_TILE_SIZE   110
 
-#define GIFT_SIZE        15
+// final size.
+#define GIFT_SIZE        60
+
 #define GIFT_SCORE       10
 
 #define VOLUME           50
