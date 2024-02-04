@@ -7,7 +7,7 @@ The Super Pang Clone project is a commendable effort to recreate the iconic arca
 
 ## Technologies Used:
 - **SFML** Simple and Fast Multimedia Library - for graphic and sound:
-- 
+
 ## Project Structure - main classes:
 - **Controller**: Responsible for the game loop handling and gameplay flow.
 - **Menu**: Manage the user interface of the game.  
@@ -23,7 +23,7 @@ The Super Pang Clone project is a commendable effort to recreate the iconic arca
 ## Getting Started:
 1. Clone the repository to your local machine.
    ```bash
-   git clone <repository_url>
+   git clone <[repository_url](https://github.com/Daniel959595/Super-Pang.git)>
 2. Install SFML library: <a href="https://www.sfml-dev.org/download.php">Download from here</a>.
 3. Extract the library and make sure its in the exact path as follow: "C:/SFML/SFML-2.5.1/lib/cmake/SFML".
 
