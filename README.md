@@ -28,7 +28,7 @@ The Super Pang Clone project is a commendable effort to recreate the iconic arca
 3. Extract the library and make sure its in the exact path as follow: "C:/SFML/SFML-2.5.1/lib/cmake/SFML".
 
 ## Programming Techniques:
-The use of advanced programming techniques such as inheritance, polymorphism, templates, shared_ptr, and exception handling. These techniques contribute to code reusability and maintainability, enhancing the project's overall quality. 
+In this project we used advanced programming techniques such as inheritance, polymorphism, templates, shared_ptr, exception handling and more. These techniques contribute to code reusability and maintainability, enhancing the project's overall quality. 
 
 ## Data Structures::
 The project leverages standard template library (STL) data structures like vectors and shared_ptr, and maps, This choice enhances the efficiency of data manipulation. 
