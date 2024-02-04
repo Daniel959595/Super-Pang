@@ -23,7 +23,7 @@ The Super Pang Clone project is a commendable effort to recreate the iconic arca
 ## Getting Started:
 1. Clone the repository to your local machine.
    ```bash
-   git clone <[repository_url](https://github.com/Daniel959595/Super-Pang.git)>
+   git clone <https://github.com/Daniel959595/Super-Pang.git>
 2. Install SFML library: <a href="https://www.sfml-dev.org/download.php">Download from here</a>.
 3. Extract the library and make sure its in the exact path as follow: "C:/SFML/SFML-2.5.1/lib/cmake/SFML".
 
