@@ -6,7 +6,7 @@
 The Super Pang Clone project is a commendable effort to recreate the iconic arcade game "Super Pang" using C++ and the SFML library. The project incorporates advanced programming techniques, data structures, design patterns, and physics mechanics to deliver a well-rounded gaming experience. Below is a detailed review of the project's key aspects.
 
 ## Technologies Used:
-- **SFML** Simple and Fast Multimedia Library - for graphic and sounds.
+- **SFML** Simple and Fast Multimedia Library - for graphics and sounds.
 
 ## Project Structure - main classes:
 - **Controller**: Responsible for the game loop handling and gameplay flow.
