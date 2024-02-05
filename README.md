@@ -25,15 +25,15 @@ The Super Pang Clone project is a commendable effort to recreate the iconic arca
    ```bash
    git clone <https://github.com/Daniel959595/Super-Pang.git>
 2. Install SFML library: <a href="https://www.sfml-dev.org/download.php">Download from here</a>.
-3. Extract the library and make sure its in the exact path as follow: "C:/SFML/SFML-2.5.1/lib/cmake/SFML".
+3. Extract the library and make sure its in the exact path as follow: "C:/SFML/SFML-2.5.1".
 
 ## Programming Techniques:
 In this project we used advanced programming techniques such as inheritance, polymorphism, templates, shared_ptr, exception handling and more. These techniques contribute to code reusability and maintainability, enhancing the project's overall quality. 
 
-## Data Structures::
+## Data Structures:
 The project leverages standard template library (STL) data structures like vectors and shared_ptr, and maps, This choice enhances the efficiency of data manipulation. 
 
-## Design Patterns::
+## Design Patterns:
 The incorporation of design patterns, including reading data from files, basic virtual classes, and separate classes for every aspect of the game is a thoughtful and structured approach to promotes flexibility and extensibility.
 
 ## Collision Handling:
